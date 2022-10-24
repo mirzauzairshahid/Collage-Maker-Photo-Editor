@@ -1,0 +1,2 @@
+include ':app',':simplecropview'
+rootProject.name='Photo Editor'

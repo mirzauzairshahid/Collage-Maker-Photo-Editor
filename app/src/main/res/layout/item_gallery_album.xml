@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/thumbnailView"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/gallery" />
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thumbnailView"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="7dp"
+            android:text="Camera"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/itemCountView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thumbnailView"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_toRightOf="@+id/titleView"
+            android:text="(2)"
+            android:textColor="#000000" />
+    </RelativeLayout>
+
+</FrameLayout>

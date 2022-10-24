@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:name="text-shadow"
+        android:translateX="4"
+        android:translateY="3">
+        <path
+            android:name="Shape"
+            android:fillColor="#ffffff"
+            android:fillType="nonZero"
+            android:pathData="M 15.5,0 L 15.5,3.6 L 9.54,3.6 L 9.54,18 L 5.96,18 L 5.96,3.6 L 0,3.6 L 0,0 z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+    </group>
+</vector>

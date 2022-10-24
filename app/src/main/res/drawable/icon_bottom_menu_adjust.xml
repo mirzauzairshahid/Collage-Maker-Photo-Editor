@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="25dp"
+    android:height="24dp"
+    android:viewportWidth="25"
+    android:viewportHeight="24">
+    <group
+        android:name="dots-vertical"
+        android:translateX="2.5"
+        android:translateY="2.5">
+        <group
+            android:name="Group"
+            android:translateX="0"
+            android:translateY="7.5">
+            <path
+                android:name="Path"
+                android:fillColor="#ffffff"
+                android:pathData="M5 0 C6.38071187 0 7.5 1.11928813 7.5 2.5 C7.5 3.88071187 6.38071187 5 5 5 C3.61928813 5 2.5 3.88071187 2.5 2.5 C2.5 1.11928813 3.61928813 0 5 0 Z" />
+            <path
+                android:name="Path-2-Copy-2"
+                android:fillColor="#ff000000"
+                android:pathData="M0 2.5 L5.12109375 2.5"
+                android:strokeWidth="2"
+                android:strokeColor="#ffffff" />
+            <path
+                android:name="Path-2-Copy-3"
+                android:fillColor="#ff000000"
+                android:pathData="M9.5 2.5 L20 2.5"
+                android:strokeWidth="2"
+                android:strokeColor="#ffffff" />
+        </group>
+        <path
+            android:name="Shape"
+            android:fillColor="#ffffff"
+            android:fillType="nonZero"
+            android:pathData="M10.5 14.5 C11.8807119 14.5 13 15.6192881 13 17 C13 18.3807119 11.8807119 19.5 10.5 19.5 C9.11928813 19.5 8 18.3807119 8 17 C8 15.6192881 9.11928813 14.5 10.5 14.5 Z M15 0 C16.3807119 0 17.5 1.11928813 17.5 2.5 C17.5 3.88071187 16.3807119 5 15 5 C13.6192881 5 12.5 3.88071187 12.5 2.5 C12.5 1.11928813 13.6192881 0 15 0 Z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+        <path
+            android:name="Path-2"
+            android:fillColor="#00000000"
+            android:fillType="nonZero"
+            android:pathData="M0 2.5 L10.5 2.5"
+            android:strokeWidth="2"
+            android:strokeColor="#ffffff" />
+        <path
+            android:name="Path-2-Copy"
+            android:fillColor="#00000000"
+            android:fillType="nonZero"
+            android:pathData="M13 2.5 L20 2.5"
+            android:strokeWidth="2"
+            android:strokeColor="#ffffff" />
+        <path
+            android:name="Path-2-Copy-4"
+            android:fillColor="#00000000"
+            android:fillType="nonZero"
+            android:pathData="M0 17 L6 17"
+            android:strokeWidth="2"
+            android:strokeColor="#ffffff" />
+        <path
+            android:name="Path-2-Copy-5"
+            android:fillColor="#00000000"
+            android:fillType="nonZero"
+            android:pathData="M11 17 L20 17"
+            android:strokeWidth="2"
+            android:strokeColor="#ffffff" />
+    </group>
+</vector>

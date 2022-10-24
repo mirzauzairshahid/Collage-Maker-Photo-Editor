@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_adjust"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_gravity="center"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_blend_type"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:lines="1"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        app:autoSizeMaxTextSize="13sp"
+        app:autoSizeMinTextSize="6sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="none" />
+
+</LinearLayout>

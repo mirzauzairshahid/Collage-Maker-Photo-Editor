@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:name="weather-hail"
+        android:translateX="2"
+        android:translateY="4">
+        <path
+            android:name="Path"
+            android:fillColor="#d8d8d8"
+            android:fillType="nonZero"
+            android:pathData="M 5.85,3.53 L 4.25,7.7 L 0,9.26 L 4.25,10.83 L 5.85,15 L 7.45,10.83 L 11.7,9.26 L 7.45,7.7 z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+        <path
+            android:name="Path-Copy"
+            android:fillColor="#d8d8d8"
+            android:fillType="nonZero"
+            android:pathData="M 14.4,0 L 13.42,2.57 L 10.8,3.53 L 13.42,4.49 L 14.4,7.06 L 15.38,4.49 L 18,3.53 L 15.38,2.57 z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+        <path
+            android:name="Path-Copy-2"
+            android:fillColor="#d8d8d8"
+            android:fillType="nonZero"
+            android:pathData="M 15.3,9.71 L 14.56,11.63 L 12.6,12.35 L 14.56,13.07 L 15.3,15 L 16.04,13.07 L 18,12.35 L 16.04,11.63 z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+    </group>
+</vector>

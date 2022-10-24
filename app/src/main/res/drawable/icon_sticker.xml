@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:name="sticker-emoji"
+        android:translateX="0"
+        android:translateY="0">
+        <path
+            android:name="Shape"
+            android:fillColor="#ffffff"
+            android:fillType="nonZero"
+            android:pathData="M6.15 3 C4.404 3 3 4.404 3 6.15 L3 17.85 C3 19.596 4.404 21 6.15 21 L15.6 21 L21 15.6 L21 6.15 C21 4.404 19.596 3 17.85 3 L6.15 3 Z M6.375 4.8 L17.625 4.8 C18.4948485 4.8 19.2 5.50515152 19.2 6.375 L19.2 14.7 L17.85 14.7 C16.104 14.7 14.7 16.104 14.7 17.85 L14.7 19.2 L6.375 19.2 C5.50515152 19.2 4.8 18.4948485 4.8 17.625 L4.8 6.375 C4.8 5.50515152 5.50515152 4.8 6.375 4.8 Z M14.196 7.293 C14.052 7.293 13.908 7.311 13.773 7.347 C12.927 7.581 12.45 8.445 12.666 9.3 C12.711 9.435 12.774 9.57 12.855 9.696 L15.762 8.904 C15.762 8.751 15.744 8.598 15.708 8.445 C15.519 7.77 14.898 7.293 14.196 7.293 Z M8.553 8.85 C8.4 8.85 8.265 8.85 8.13 8.895 C7.293 9.129 6.798 9.993 7.023 10.83 C7.05 10.974 7.131 11.1 7.212 11.244 L10.119 10.452 C10.119 10.299 10.101 10.146 10.065 10.002 C9.876 9.3 9.255 8.85 8.553 8.85 Z M16.248 11.334 L8.031 13.593 C9.219 14.97 11.1 15.546 12.855 15.069 C14.61 14.583 15.924 13.125 16.248 11.334 Z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+    </group>
+</vector>

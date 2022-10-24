@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="img_options">
+        <item>@drawable/icon_bottom_menu_crop</item>
+        <item>@drawable/icon_bottom_menu_filter</item>
+        <item>@drawable/icon_bottom_menu_effect</item>
+        <item>@drawable/icon_bottom_menu_adjust</item>
+        <item>@drawable/icon_bottom_menu_hsl</item>
+        <item>@drawable/icon_bottom_menu_layer</item>
+    </integer-array>
+
+
+    <string-array name="sticker_color">
+        <item>#FFFFFF</item>
+        <item>#000000</item>
+        <item>#C9BCB4</item>
+        <item>#F0ACAC</item>
+        <item>#F2B78E</item>
+        <item>#F0D69C</item>
+        <item>#C5DDA2</item>
+        <item>#4EB2A7</item>
+        <item>#05779A</item>
+        <item>#9AB9F0</item>
+        <item>#A484B7</item>
+        <item>#F2C0E3</item>
+        <item>#B91F32</item>
+        <item>#C26024</item>
+        <item>#FA9E28</item>
+        <item>#FEE847</item>
+        <item>#72C52F</item>
+        <item>#0B7D09</item>
+        <item>#27CBB9</item>
+        <item>#3574E6</item>
+        <item>#4040C9</item>
+        <item>#8A33B5</item>
+    </string-array>
+
+    <array name="fonts_sticker">
+        <item>font/anton_regular.ttf</item>
+        <item>font/artifact.ttf</item>
+        <item>font/BPdotsUnicaseSquare.otf</item>
+        <item>font/carbontype.ttf</item>
+        <item>font/caveat_regular.ttf</item>
+        <item>font/curve.ttf</item>
+        <item>font/digital.ttf</item>
+        <item>font/FrederickatheGreat_Regular.ttf</item>
+        <item>font/libre.otf</item>
+        <item>font/LibreBarcode39Text_Regular.ttf</item>
+        <item>font/mono.ttf</item>
+        <item>font/pecita.otf</item>
+        <item>font/pirataone.ttf</item>
+        <item>font/reey.otf</item>
+        <item>font/report.ttf</item>
+        <item>font/Roboto_BoldCondensed.ttf</item>
+        <item>font/RobotoMono_Medium.ttf</item>
+        <item>font/Russian_AmaticSC.ttf</item>
+        <item>font/Russian_Blogger.otf</item>
+        <item>font/Russian_Pacifico.ttf</item>
+        <item>font/Russian_Regular.ttf</item>
+        <item>font/selima.otf</item>
+        <item>font/silkscreen.ttf</item>
+        <item>font/sticker_time.otf</item>
+    </array>
+</resources>

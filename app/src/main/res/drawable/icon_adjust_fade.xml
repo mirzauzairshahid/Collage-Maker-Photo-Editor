@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:name="Group-15"
+        android:translateX="1.8462"
+        android:translateY="1.8461">
+        <path
+            android:name="Combined-Shape"
+            android:fillColor="#3b3a3a"
+            android:fillType="nonZero"
+            android:pathData="M10.076001 0.0071417606 L10.076001 19.9694032 C9.39380017 19.9959669 8.70574332 19.9486047 8.02303294 19.8247614 C6.93379826 19.6271748 5.89649789 19.2418593 4.95043415 18.6945737 L4.95043415 1.28194464 C6.51365161 0.377617265 8.28853547 -0.0624522656 10.076001 0.0071417606 Z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+        <path
+            android:name="Combined-Shape"
+            android:fillColor="#2f2e2e"
+            android:fillType="nonZero"
+            android:pathData="M4.93535887 1.26362873 L4.93535887 18.5824961 C3.67987331 17.8596924 2.58531506 16.8501661 1.74441998 15.6146959 C0.277119326 13.4588905 -0.297641441 10.7917302 0.14657849 8.19995999 C0.590798422 5.60818973 2.01761087 3.30411379 4.11313338 1.79460257 C4.37956422 1.60267892 4.65403012 1.42559852 4.93535887 1.26362873 Z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+        <path
+            android:name="Combined-Shape"
+            android:fillColor="#616161"
+            android:fillType="nonZero"
+            android:pathData="M15.036513 18.5272475 L15.036513 1.33832269 C18.5276575 3.36509149 20.5608856 7.43461687 19.8202761 11.6574459 C19.3657255 14.2492162 17.9057313 16.5532921 15.7614758 18.0628033 C15.5257117 18.2287763 15.2837989 18.3836486 15.036513 18.5272475 Z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+        <path
+            android:name="Combined-Shape"
+            android:fillColor="#4f4e4e"
+            android:fillType="nonZero"
+            android:pathData="M15.2446677 1.47769715 L15.2446677 18.4957371 C13.6979196 19.4746789 11.9211376 19.9838243 10.1191009 19.9764687 L10.1191009 0.0000788735744 C10.6932746 -0.00226914007 11.2703111 0.047795654 11.8435779 0.151785942 C13.0861691 0.377191331 14.2316029 0.836406319 15.2446677 1.47769715 Z"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+    </group>
+</vector>

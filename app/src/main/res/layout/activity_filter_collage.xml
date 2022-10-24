@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".FilterCollageActivity">
+
+    <ImageView
+        android:id="@+id/img_save"
+        android:layout_width="56dp"
+        android:layout_height="52dp"
+        android:layout_gravity="right"
+        android:src="@drawable/ic_folder" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".98">
+
+        <ImageView
+            android:id="@+id/img_collage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filter_names"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="@color/transBackground" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_filterstype"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/transBackground"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60dp"
+    android:layout_height="86dp"
+    android:layout_marginLeft="2dp"
+    android:padding="5dp"
+    android:id="@+id/rl_filteritem"
+    android:layout_marginRight="2dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/thumbnail_filter"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/filterName"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:text="FILTER"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="9sp" />
+
+</RelativeLayout>

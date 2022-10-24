@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:name="Artboard"
+        android:translateX="-288"
+        android:translateY="-389">
+        <path
+            android:name="Shape"
+            android:fillColor="#ffffff"
+            android:fillType="nonZero"
+            android:pathData="M311 392.217742 C311 390.992917 310.007083 390 308.782258 390 L295.475806 390 C294.250981 390 293.258065 390.992917 293.258065 392.217742 L293.258065 405.524194 C293.258065 406.749019 294.250981 407.741935 295.475806 407.741935 L308.782258 407.741935 C310.007083 407.741935 311 406.749019 311 405.524194 L311 392.217742 Z M299.467742 401.070968 L301.748763 404.148129 L305.086022 399.935484 L309.580645 405.612903 L296.096774 405.612903 M289 394.258065 L289 409.782258 C289 411.007083 289.992917 412 291.217742 412 L306.741935 412 L306.741935 409.782258 L291.217742 409.782258 L291.217742 394.258065"
+            android:strokeWidth="1"
+            android:strokeColor="#00000000" />
+    </group>
+</vector>
