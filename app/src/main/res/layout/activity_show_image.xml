@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/ic_share_bg"
     android:orientation="vertical"
-    tools:context=".ShowImageActivity">
+    tools:context=".activities.ShowImageActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

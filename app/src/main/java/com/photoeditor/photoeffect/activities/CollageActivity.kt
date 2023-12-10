@@ -1,4 +1,4 @@
-package com.photoeditor.photoeffect
+package com.photoeditor.photoeffect.activities
 
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -19,11 +19,10 @@ import com.photoeditor.photoeffect.multitouch.PhotoView
 import com.photoeditor.photoeffect.model.TemplateItem
 import com.photoeditor.photoeffect.utils.FrameImageUtils
 import com.photoeditor.photoeffect.utils.ImageUtils
-import kotlinx.android.synthetic.main.activity_collage.*
-import kotlinx.android.synthetic.main.activity_collage.ll_border
 import android.content.Intent
-import android.os.SystemClock
-import android.widget.ImageView
+import com.photoeditor.photoeffect.AndroidUtils
+import com.photoeditor.photoeffect.R
+import com.photoeditor.photoeffect.databinding.ActivityCollageBinding
 import java.io.*
 
 
@@ -44,7 +43,6 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
     val MAX_CORNER_PROGRESS = 200.0f
     private var mBackgroundColor = Color.WHITE
     private var mBackgroundImage: Bitmap? = null
-    private var mBackgroundUri: Uri? = null
     private var mSavedInstanceState: Bundle? = null
     protected var mLayoutRatio = RATIO_SQUARE
     protected lateinit var mPhotoView: PhotoView
@@ -55,24 +53,15 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
     protected var mSelectedPhotoPaths: MutableList<String> = java.util.ArrayList()
 
     lateinit var frameAdapter: FrameAdapter
-    lateinit var img_background: ImageView
-
-    private var mLastClickTime: Long = 0
-    fun checkClick() {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-    }
 
     override fun onBGClick(drawable: Drawable) {
 
-        var bmp = mFramePhotoLayout!!.createImage()
-        var bitmap = (drawable as BitmapDrawable).bitmap
+        val bmp = mFramePhotoLayout!!.createImage()
+        val bitmap = (drawable as BitmapDrawable).bitmap
         mBackgroundImage = AndroidUtils.resizeImageToNewSize(bitmap, bmp.width, bmp.height)
 
 //        img_background.background = BitmapDrawable(resources, mBackgroundImage)
-        img_background.setImageBitmap(mBackgroundImage)
+        binding.imgBackground.setImageBitmap(mBackgroundImage)
 
     }
 
@@ -93,8 +82,8 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
         val size = Math.min(mSelectedPhotoPaths.size, templateItem.photoItemList.size)
         for (idx in 0 until size) {
-            val photoItem = templateItem.photoItemList.get(idx)
-            if (photoItem.imagePath == null || photoItem.imagePath!!.length < 1) {
+            val photoItem = templateItem.photoItemList[idx]
+            if (photoItem.imagePath.isNullOrEmpty()) {
                 photoItem.imagePath = mSelectedPhotoPaths[idx]
             }
         }
@@ -107,7 +96,7 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class space_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            mSpace = MAX_SPACE * seekBar!!.getProgress() / MAX_SPACE_PROGRESS
+            mSpace = MAX_SPACE * seekBar!!.progress / MAX_SPACE_PROGRESS
             if (mFramePhotoLayout != null)
                 mFramePhotoLayout!!.setSpace(mSpace, mCorner)
         }
@@ -122,7 +111,7 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class corner_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            mCorner = MAX_CORNER * seekBar!!.getProgress() / MAX_CORNER_PROGRESS
+            mCorner = MAX_CORNER * seekBar!!.progress / MAX_CORNER_PROGRESS
             if (mFramePhotoLayout != null)
                 mFramePhotoLayout!!.setSpace(mSpace, mCorner)
         }
@@ -140,41 +129,41 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         when (v!!.id) {
 
             R.id.tab_layout -> {
-                tab_layout.setBackgroundColor(resources.getColor(R.color.colorAccent))
-                tab_border.setBackgroundColor(resources.getColor(R.color.windowBackground))
-                tab_bg.setBackgroundColor(resources.getColor(R.color.windowBackground))
+                binding.tabLayout.setBackgroundColor(resources.getColor(R.color.colorAccent))
+                binding.tabBorder.setBackgroundColor(resources.getColor(R.color.windowBackground))
+                binding.tabBg.setBackgroundColor(resources.getColor(R.color.windowBackground))
 
-                ll_frame.visibility = View.VISIBLE
-                ll_border.visibility = View.GONE
-                ll_bg.visibility = View.GONE
+                binding.llFrame.visibility = View.VISIBLE
+                binding.llBorder.visibility = View.GONE
+                binding.llBg.visibility = View.GONE
             }
 
             R.id.tab_border -> {
-                tab_layout.setBackgroundColor(resources.getColor(R.color.windowBackground))
-                tab_border.setBackgroundColor(resources.getColor(R.color.colorAccent))
-                tab_bg.setBackgroundColor(resources.getColor(R.color.windowBackground))
+                binding.tabLayout.setBackgroundColor(resources.getColor(R.color.windowBackground))
+                binding.tabBorder.setBackgroundColor(resources.getColor(R.color.colorAccent))
+                binding.tabBg.setBackgroundColor(resources.getColor(R.color.windowBackground))
 
-                ll_frame.visibility = View.GONE
-                ll_border.visibility = View.VISIBLE
-                ll_bg.visibility = View.GONE
+                binding.llFrame.visibility = View.GONE
+                binding.llBorder.visibility = View.VISIBLE
+                binding.llBg.visibility = View.GONE
             }
+
             R.id.tab_bg -> {
-                tab_layout.setBackgroundColor(resources.getColor(R.color.windowBackground))
-                tab_border.setBackgroundColor(resources.getColor(R.color.windowBackground))
-                tab_bg.setBackgroundColor(resources.getColor(R.color.colorAccent))
+                binding.tabLayout.setBackgroundColor(resources.getColor(R.color.windowBackground))
+                binding.tabBorder.setBackgroundColor(resources.getColor(R.color.windowBackground))
+                binding.tabBg.setBackgroundColor(resources.getColor(R.color.colorAccent))
 
-                ll_frame.visibility = View.GONE
-                ll_border.visibility = View.GONE
-                ll_bg.visibility = View.VISIBLE
+                binding.llFrame.visibility = View.GONE
+                binding.llBorder.visibility = View.GONE
+                binding.llBg.visibility = View.VISIBLE
 
             }
-            R.id.btn_next -> {
 
-                checkClick()
+            R.id.btn_next -> {
 
                 var outStream: FileOutputStream? = null
                 try {
-                    var collageBitmap = createOutputImage()
+                    val collageBitmap = createOutputImage()
                     outStream = FileOutputStream(File(cacheDir, "tempBMP"))
                     collageBitmap.compress(Bitmap.CompressFormat.JPEG, 75, outStream)
                     outStream.close()
@@ -191,9 +180,13 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
+    private val binding by lazy {
+        ActivityCollageBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_collage)
+        setContentView(binding.root)
 
         DEFAULT_SPACE = ImageUtils.pxFromDp(this, 2F)
         MAX_SPACE = ImageUtils.pxFromDp(this, 30F)
@@ -209,43 +202,43 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         mImageInTemplateCount = intent.getIntExtra("imagesinTemplate", 0)
         val extraImagePaths = intent.getStringArrayListExtra("selectedImages")
 
-        list_bg.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list_bg.adapter = BackgroundAdapter(this, this)
+        binding.listBg.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.listBg.adapter = BackgroundAdapter(this, this)
 
-        tab_layout.setOnClickListener(this)
-        tab_border.setOnClickListener(this)
-        tab_bg.setOnClickListener(this)
+        binding.tabLayout.setOnClickListener(this)
+        binding.tabBorder.setOnClickListener(this)
+        binding.tabBg.setOnClickListener(this)
 
-        seekbar_space.setOnSeekBarChangeListener(space_listener())
-        seekbar_corner.setOnSeekBarChangeListener(corner_listener())
+        binding.seekbarSpace.setOnSeekBarChangeListener(space_listener())
+        binding.seekbarCorner.setOnSeekBarChangeListener(corner_listener())
 
         mPhotoView = PhotoView(this)
-        rl_container.getViewTreeObserver()
+        binding.rlContainer.viewTreeObserver
             .addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     mOutputScale = ImageUtils.calculateOutputScaleFactor(
-                        rl_container.getWidth(),
-                        rl_container.getHeight()
+                        binding.rlContainer.width,
+                        binding.rlContainer.height
                     )
                     buildLayout(mSelectedTemplateItem!!)
                     // remove listener
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        rl_container.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                        binding.rlContainer.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     } else {
-                        rl_container.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                        binding.rlContainer.viewTreeObserver.removeGlobalOnLayoutListener(this)
                     }
                 }
             })
 
-        img_background = findViewById<ImageView>(R.id.img_background)
-
         loadFrameImages()
-        list_frames.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.listFrames.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         frameAdapter = FrameAdapter(this, mTemplateItemList!!, this)
-        list_frames.adapter = frameAdapter
+        binding.listFrames.adapter = frameAdapter
 
 
-        mSelectedTemplateItem = mTemplateItemList!!.get(0)
+        mSelectedTemplateItem = mTemplateItemList!![0]
         mSelectedTemplateItem!!.isSelected = true
 
         if (extraImagePaths != null) {
@@ -255,7 +248,7 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
                 mSelectedTemplateItem!!.photoItemList[i].imagePath = extraImagePaths[i]
         }
 
-        btn_next.setOnClickListener(this)
+        binding.btnNext.setOnClickListener(this)
     }
 
     private fun loadFrameImages() {
@@ -297,8 +290,8 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 //            rl_container.setBackgroundColor(mBackgroundColor)
 //        }
 
-        var viewWidth = rl_container.getWidth()
-        var viewHeight = rl_container.getHeight()
+        var viewWidth = binding.rlContainer.width
+        var viewHeight = binding.rlContainer.height
         if (mLayoutRatio === RATIO_SQUARE) {
             if (viewWidth > viewHeight) {
                 viewWidth = viewHeight
@@ -330,33 +323,33 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         }
         val params = RelativeLayout.LayoutParams(viewWidth, viewHeight)
         params.addRule(RelativeLayout.CENTER_IN_PARENT)
-        rl_container.removeAllViews()
+        binding.rlContainer.removeAllViews()
 
-        rl_container.removeView(img_background)
-        rl_container.addView(img_background, params)
+        binding.rlContainer.removeView(binding.imgBackground)
+        binding.rlContainer.addView(binding.imgBackground, params)
 
-        rl_container.addView(mFramePhotoLayout, params)
+        binding.rlContainer.addView(mFramePhotoLayout, params)
         //add sticker view
-        rl_container.removeView(mPhotoView)
-        rl_container.addView(mPhotoView, params)
+        binding.rlContainer.removeView(mPhotoView)
+        binding.rlContainer.addView(mPhotoView, params)
         //reset space and corner seek bars
 
-        seekbar_space.setProgress((MAX_SPACE_PROGRESS * mSpace / MAX_SPACE).toInt())
-        seekbar_corner.setProgress((MAX_CORNER_PROGRESS * mCorner / MAX_CORNER).toInt())
+        binding.seekbarSpace.progress = (MAX_SPACE_PROGRESS * mSpace / MAX_SPACE).toInt()
+        binding.seekbarCorner.progress = (MAX_CORNER_PROGRESS * mCorner / MAX_CORNER).toInt()
     }
 
     @Throws(OutOfMemoryError::class)
     fun createOutputImage(): Bitmap {
         try {
-            var template = mFramePhotoLayout!!.createImage()
+            val template = mFramePhotoLayout!!.createImage()
             val result =
-                Bitmap.createBitmap(template!!.width, template.height, Bitmap.Config.ARGB_8888)
+                Bitmap.createBitmap(template.width, template.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(result)
             val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            if (mBackgroundImage != null && !mBackgroundImage!!.isRecycled()) {
+            if (mBackgroundImage != null && !mBackgroundImage!!.isRecycled) {
                 canvas.drawBitmap(
                     mBackgroundImage!!,
-                    Rect(0, 0, mBackgroundImage!!.getWidth(), mBackgroundImage!!.getHeight()),
+                    Rect(0, 0, mBackgroundImage!!.width, mBackgroundImage!!.height),
                     Rect(0, 0, result.width, result.height),
                     paint
                 )

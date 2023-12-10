@@ -1,8 +1,7 @@
-package com.photoeditor.photoeffect
+package com.photoeditor.photoeffect.activities
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.TypedArray
 import android.graphics.*
@@ -24,10 +23,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.isseiaoki.simplecropview.CropImageView
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.*
-import kotlinx.android.synthetic.main.activity_image_edit.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
+import com.photoeditor.photoeffect.AndroidUtils
 import com.photoeditor.photoeffect.AndroidUtils.filter_bw
 import com.photoeditor.photoeffect.AndroidUtils.filter_clr1
 import com.photoeditor.photoeffect.AndroidUtils.filter_clr2
@@ -44,13 +43,15 @@ import com.photoeditor.photoeffect.AndroidUtils.filter_movie
 import com.photoeditor.photoeffect.AndroidUtils.filter_pink
 import com.photoeditor.photoeffect.AndroidUtils.filter_retro
 import com.photoeditor.photoeffect.AndroidUtils.filter_tint
+import com.photoeditor.photoeffect.GPUImageFilterTools
+import com.photoeditor.photoeffect.R
 import com.photoeditor.photoeffect.adapter.*
 import com.photoeditor.photoeffect.model.FilterData
 import com.photoeditor.photoeffect.model.EffectData
 import com.photoeditor.photoeffect.stickerview.StickerImageView
 import com.photoeditor.photoeffect.stickerview.StickerTextView
 import com.photoeditor.photoeffect.stickerview.StickerView
-import com.photoeditor.photoblur.AdLoader
+import com.photoeditor.photoeffect.databinding.ActivityImageEditBinding
 import java.io.*
 import java.lang.NullPointerException
 import java.util.*
@@ -201,40 +202,51 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
     override fun onResizeClick(position: Int) {
         when (position) {
             0 -> {
-                cropImageView.setCropMode(CropImageView.CropMode.FIT_IMAGE)
+                binding.cropImageView.setCropMode(CropImageView.CropMode.FIT_IMAGE)
             }
+
             1 -> {
-                cropImageView.setCropMode(CropImageView.CropMode.FREE)
+                binding.cropImageView.setCropMode(CropImageView.CropMode.FREE)
             }
+
             2 -> {
-                cropImageView.setCustomRatio(1, 1)
+                binding.cropImageView.setCustomRatio(1, 1)
             }
+
             3 -> {
-                cropImageView.setCustomRatio(4, 5)
+                binding.cropImageView.setCustomRatio(4, 5)
             }
+
             4 -> {
-                cropImageView.setCustomRatio(2, 3)
+                binding.cropImageView.setCustomRatio(2, 3)
             }
+
             5 -> {
-                cropImageView.setCustomRatio(3, 2)
+                binding.cropImageView.setCustomRatio(3, 2)
             }
+
             6 -> {
-                cropImageView.setCropMode(CropImageView.CropMode.RATIO_3_4)
+                binding.cropImageView.setCropMode(CropImageView.CropMode.RATIO_3_4)
             }
+
             7 -> {
-                cropImageView.setCropMode(CropImageView.CropMode.RATIO_4_3)
+                binding.cropImageView.setCropMode(CropImageView.CropMode.RATIO_4_3)
             }
+
             8 -> {
-                cropImageView.setCustomRatio(1, 2)
+                binding.cropImageView.setCustomRatio(1, 2)
             }
+
             9 -> {
-                cropImageView.setCustomRatio(2, 1)
+                binding.cropImageView.setCustomRatio(2, 1)
             }
+
             10 -> {
-                cropImageView.setCropMode(CropImageView.CropMode.RATIO_9_16)
+                binding.cropImageView.setCropMode(CropImageView.CropMode.RATIO_9_16)
             }
+
             11 -> {
-                cropImageView.setCropMode(CropImageView.CropMode.RATIO_16_9)
+                binding.cropImageView.setCropMode(CropImageView.CropMode.RATIO_16_9)
             }
         }
     }
@@ -243,257 +255,301 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.crop_cancel -> {
-                ll_crop.visibility = View.GONE
+                binding.llCrop.visibility = View.GONE
             }
+
             R.id.crop_confirm -> {
-                original_bitmap = cropImageView.croppedBitmap
-                img_main.setImageBitmap(original_bitmap)
-                ll_crop.visibility = View.GONE
+                original_bitmap = binding.cropImageView.croppedBitmap
+                binding.imgMain.setImageBitmap(original_bitmap)
+                binding.llCrop.visibility = View.GONE
             }
 
             R.id.filter_cancel -> {
-                ll_filter.visibility = View.GONE
-                img_main.setImageBitmap(original_bitmap)
+                binding.llFilter.visibility = View.GONE
+                binding.imgMain.setImageBitmap(original_bitmap)
             }
+
             R.id.filter_confirm -> {
-                val bitmap = (img_main.drawable as BitmapDrawable).bitmap
+                val bitmap = (binding.imgMain.drawable as BitmapDrawable).bitmap
                 original_bitmap = bitmap
 
-                img_main.setImageBitmap(original_bitmap)
+                binding.imgMain.setImageBitmap(original_bitmap)
 
-                ll_filter.visibility = View.GONE
+                binding.llFilter.visibility = View.GONE
             }
 
             R.id.effect_cancel -> {
-                ll_effect.visibility = View.GONE
-                img_main.setImageBitmap(original_bitmap)
+                binding.llEffect.visibility = View.GONE
+                binding.imgMain.setImageBitmap(original_bitmap)
 
-                overlay_light.visibility = View.GONE
-                overlay_texture.visibility = View.GONE
-                overlay_weather.visibility = View.GONE
+                binding.overlayLight.visibility = View.GONE
+                binding.overlayTexture.visibility = View.GONE
+                binding.overlayWeather.visibility = View.GONE
             }
+
             R.id.effect_confirm -> {
-                val bitmap = (img_main.drawable as BitmapDrawable).bitmap
+                val bitmap = (binding.imgMain.drawable as BitmapDrawable).bitmap
                 original_bitmap = bitmap
 
-                img_main.setImageBitmap(original_bitmap)
+                binding.imgMain.setImageBitmap(original_bitmap)
 
-                ll_effect.visibility = View.GONE
+                binding.llEffect.visibility = View.GONE
             }
+
             R.id.effect_back -> {
-                ll_effect_type.visibility = View.VISIBLE
-                ll_blend_type.visibility = View.GONE
-                seekbar_blend.visibility = View.GONE
+                binding.llEffectType.visibility = View.VISIBLE
+                binding.llBlendType.visibility = View.GONE
+                binding.seekbarBlend.visibility = View.GONE
             }
 
             R.id.adjust_cancel -> {
-                ll_adjust.visibility = View.GONE
-                img_main.setImageBitmap(original_bitmap)
+                binding.llAdjust.visibility = View.GONE
+                binding.imgMain.setImageBitmap(original_bitmap)
             }
+
             R.id.adjust_confirm -> {
-                val bitmap = (img_main.drawable as BitmapDrawable).bitmap
+                val bitmap = (binding.imgMain.drawable as BitmapDrawable).bitmap
                 original_bitmap = bitmap
 
-                img_main.setImageBitmap(original_bitmap)
+                binding.imgMain.setImageBitmap(original_bitmap)
 
-                ll_adjust.visibility = View.GONE
+                binding.llAdjust.visibility = View.GONE
 
             }
+
             R.id.hsl_cancel -> {
-                ll_hsl.visibility = View.GONE
-                img_main.setImageBitmap(original_bitmap)
+                binding.llHsl.visibility = View.GONE
+                binding.imgMain.setImageBitmap(original_bitmap)
             }
+
             R.id.hsl_confirm -> {
-                val bitmap = (img_main.drawable as BitmapDrawable).bitmap
+                val bitmap = (binding.imgMain.drawable as BitmapDrawable).bitmap
                 original_bitmap = bitmap
 
-                img_main.setImageBitmap(original_bitmap)
+                binding.imgMain.setImageBitmap(original_bitmap)
 
-                ll_hsl.visibility = View.GONE
+                binding.llHsl.visibility = View.GONE
             }
 
             R.id.layers_cancel -> {
 
                 HideStickers()
 
-                ll_layers.visibility = View.GONE
+                binding.llLayers.visibility = View.GONE
             }
+
             R.id.layers_confirm -> {
                 HideStickers()
-                ll_layers.visibility = View.GONE
+                binding.llLayers.visibility = View.GONE
             }
 
             R.id.txt_resize -> {
-                ll_rotate.visibility = View.GONE
-                ll_resize.visibility = View.VISIBLE
+                binding.llRotate.visibility = View.GONE
+                binding.llResize.visibility = View.VISIBLE
             }
 
             R.id.txt_rotate -> {
-                ll_resize.visibility = View.GONE
-                ll_rotate.visibility = View.VISIBLE
+                binding.llResize.visibility = View.GONE
+                binding.llRotate.visibility = View.VISIBLE
             }
 
             R.id.crop_rotate_left -> {
-                cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_M90D)
+                binding.cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_M90D)
             }
+
             R.id.crop_rotate_right -> {
-                cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_90D)
+                binding.cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_90D)
             }
+
             R.id.flip_horizontal -> {
 
-                cropImageView.imageBitmap =
-                    flip(cropImageView.imageBitmap, LinearLayoutManager.HORIZONTAL)
+                binding.cropImageView.imageBitmap =
+                    flip(binding.cropImageView.imageBitmap, LinearLayoutManager.HORIZONTAL)
             }
+
             R.id.flip_vertical -> {
 
-                cropImageView.imageBitmap =
-                    flip(cropImageView.imageBitmap, LinearLayoutManager.VERTICAL)
+                binding.cropImageView.imageBitmap =
+                    flip(binding.cropImageView.imageBitmap, LinearLayoutManager.VERTICAL)
 
             }
+
             R.id.ll_blend -> {
-                effect_gallery.visibility = View.VISIBLE
-                seekbar_blend.visibility = View.GONE
-                list_blend.adapter = BlendAdapter(img_blend)
-                list_blend_type.adapter = BlendTypeAdapter(img_blend)
-                ll_effect_type.visibility = View.GONE
-                ll_blend_type.visibility = View.VISIBLE
+                binding.effectGallery.visibility = View.VISIBLE
+                binding.seekbarBlend.visibility = View.GONE
+                binding.listBlend.adapter = BlendAdapter(img_blend)
+                binding.listBlendType.adapter = BlendTypeAdapter(img_blend)
+                binding.llEffectType.visibility = View.GONE
+                binding.listBlendType.visibility = View.VISIBLE
             }
+
             R.id.ll_light -> {
 
-                effect_gallery.visibility = View.GONE
-                seekbar_blend.visibility = View.VISIBLE
-                seekbar_blend.setOnSeekBarChangeListener(effectLight_listener())
-                var light_adapter =
+                binding.effectGallery.visibility = View.GONE
+                binding.seekbarBlend.visibility = View.VISIBLE
+                binding.seekbarBlend.setOnSeekBarChangeListener(effectLight_listener())
+                val light_adapter =
                     FilterNameAdapter(this, resources.getStringArray(R.array.effect_light))
-                list_blend_type.adapter = light_adapter
+                binding.listBlendType.adapter = light_adapter
 
-                list_blend.adapter = LightAdapter(light1_array, overlay_light)
+                binding.listBlend.adapter = LightAdapter(light1_array, binding.overlayLight)
 
-                setLight(overlay_light, light1_array)
+                setLight(binding.overlayLight, light1_array)
 
-                overlay_light.visibility = View.VISIBLE
+                binding.overlayLight.visibility = View.VISIBLE
 
                 light_adapter.setOnFilterNameClick(object :
                     FilterNameAdapter.FilterNameClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        if (position == 0) {
-                            list_blend.adapter = LightAdapter(light1_array, overlay_light)
-                            setLight(overlay_light, light1_array)
-                        } else if (position == 1) {
-                            list_blend.adapter = LightAdapter(light2_array, overlay_light)
-                            setLight(overlay_light, light2_array)
-                        } else if (position == 2) {
-                            list_blend.adapter = LightAdapter(festival_array, overlay_light)
-                            setLight(overlay_light, festival_array)
-                        } else if (position == 3) {
-                            list_blend.adapter = LightAdapter(love_array, overlay_light)
-                            setLight(overlay_light, love_array)
-                        } else if (position == 4) {
-                            list_blend.adapter = LightAdapter(prism_array, overlay_light)
-                            setLight(overlay_light, prism_array)
-                        } else if (position == 5) {
-                            list_blend.adapter = LightAdapter(neon_array, overlay_light)
-                            setLight(overlay_light, neon_array)
-                        } else {
-                            list_blend.adapter = LightAdapter(light1_array, overlay_light)
-                            setLight(overlay_light, light1_array)
+                        val lights = when (position) {
+                            0 -> {
+                                light1_array
+                            }
+
+                            1 -> {
+                                light2_array
+                            }
+
+                            2 -> {
+                                festival_array
+                            }
+
+                            3 -> {
+                                love_array
+                            }
+
+                            4 -> {
+                                prism_array
+                            }
+
+                            5 -> {
+                                neon_array
+                            }
+
+                            else -> {
+                                light1_array
+                            }
                         }
+                        binding.listBlend.adapter = LightAdapter(lights, binding.overlayLight)
+                        setLight(binding.overlayLight, lights)
                     }
                 })
 
-                ll_effect_type.visibility = View.GONE
-                ll_blend_type.visibility = View.VISIBLE
+                binding.llEffectType.visibility = View.GONE
+                binding.llBlendType.visibility = View.VISIBLE
             }
-            R.id.ll_texture -> {
-                effect_gallery.visibility = View.GONE
-                seekbar_blend.visibility = View.VISIBLE
-                seekbar_blend.setOnSeekBarChangeListener(effectTexture_listener())
-                var texture_adapter =
-                    FilterNameAdapter(this, resources.getStringArray(R.array.effect_texture))
-                list_blend_type.adapter = texture_adapter
 
-                list_blend.adapter = LightAdapter(dust_array, overlay_texture)
-                overlay_texture.visibility = View.VISIBLE
+            R.id.ll_texture -> {
+                binding.effectGallery.visibility = View.GONE
+                binding.seekbarBlend.visibility = View.VISIBLE
+                binding.seekbarBlend.setOnSeekBarChangeListener(effectTexture_listener())
+                val texture_adapter =
+                    FilterNameAdapter(this, resources.getStringArray(R.array.effect_texture))
+                binding.listBlendType.adapter = texture_adapter
+
+                binding.listBlend.adapter = LightAdapter(dust_array, binding.overlayTexture)
+                binding.overlayTexture.visibility = View.VISIBLE
 
                 texture_adapter.setOnFilterNameClick(object :
                     FilterNameAdapter.FilterNameClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        if (position == 0) {
-                            list_blend.adapter = LightAdapter(dust_array, overlay_texture)
-                            setLight(overlay_texture, dust_array)
-                        } else if (position == 1) {
-                            list_blend.adapter = LightAdapter(stain_array, overlay_texture)
-                            setLight(overlay_texture, stain_array)
-                        } else if (position == 2) {
-                            list_blend.adapter = LightAdapter(vintage_array, overlay_texture)
-                            setLight(overlay_texture, vintage_array)
-                        } else if (position == 3) {
-                            list_blend.adapter = LightAdapter(scratch_array, overlay_texture)
-                            setLight(overlay_texture, scratch_array)
-                        } else {
-                            list_blend.adapter = LightAdapter(dust_array, overlay_texture)
-                            setLight(overlay_texture, dust_array)
+                        val lights = when (position) {
+                            0 -> {
+                                dust_array
+                            }
+
+                            1 -> {
+                                stain_array
+                            }
+
+                            2 -> {
+                                vintage_array
+                            }
+
+                            3 -> {
+                                scratch_array
+                            }
+
+                            else -> {
+                                dust_array
+                            }
                         }
+
+                        binding.listBlend.adapter = LightAdapter(lights, binding.overlayTexture)
+                        setLight(binding.overlayTexture, lights)
                     }
                 })
 
-                ll_effect_type.visibility = View.GONE
-                ll_blend_type.visibility = View.VISIBLE
+                binding.llEffectType.visibility = View.GONE
+                binding.llBlendType.visibility = View.VISIBLE
             }
+
             R.id.ll_weather -> {
-                effect_gallery.visibility = View.GONE
-                seekbar_blend.visibility = View.VISIBLE
-                seekbar_blend.setOnSeekBarChangeListener(effectWeather_listener())
+                binding.effectGallery.visibility = View.GONE
+                binding.seekbarBlend.visibility = View.VISIBLE
+                binding.seekbarBlend.setOnSeekBarChangeListener(effectWeather_listener())
 
-                var weather_adapter =
+                val weather_adapter =
                     FilterNameAdapter(this, resources.getStringArray(R.array.effect_weather))
-                list_blend_type.adapter = weather_adapter
+                binding.listBlendType.adapter = weather_adapter
 
-                list_blend.adapter = LightAdapter(snow_array, overlay_weather)
-                overlay_weather.visibility = View.VISIBLE
+                binding.listBlend.adapter = LightAdapter(snow_array, binding.overlayWeather)
+                binding.overlayWeather.visibility = View.VISIBLE
 
                 weather_adapter.setOnFilterNameClick(object :
                     FilterNameAdapter.FilterNameClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        if (position == 0) {
-                            list_blend.adapter = LightAdapter(snow_array, overlay_weather)
-                            setLight(overlay_weather, snow_array)
-                        } else if (position == 1) {
-                            list_blend.adapter = LightAdapter(cloud_array, overlay_weather)
-                            setLight(overlay_weather, cloud_array)
-                        } else if (position == 2) {
-                            list_blend.adapter = LightAdapter(fog_array, overlay_weather)
-                            setLight(overlay_weather, fog_array)
-                        } else if (position == 3) {
-                            list_blend.adapter = LightAdapter(sunlight_array, overlay_weather)
-                            setLight(overlay_weather, sunlight_array)
-                        } else {
-                            list_blend.adapter = LightAdapter(snow_array, overlay_weather)
-                            setLight(overlay_weather, snow_array)
+                        val lights = when (position) {
+                            0 -> {
+                                snow_array
+                            }
+
+                            1 -> {
+                                cloud_array
+                            }
+
+                            2 -> {
+                                fog_array
+                            }
+
+                            3 -> {
+                                sunlight_array
+                            }
+
+                            else -> {
+                                snow_array
+                            }
                         }
+
+                        binding.listBlend.adapter = LightAdapter(lights, binding.overlayWeather)
+                        setLight(binding.overlayWeather, lights)
                     }
 
                 })
 
-                ll_effect_type.visibility = View.GONE
-                ll_blend_type.visibility = View.VISIBLE
+                binding.llEffectType.visibility = View.GONE
+                binding.llBlendType.visibility = View.VISIBLE
             }
+
             R.id.ll_text -> {
 
                 checkClick()
                 opendialogtext()
             }
+
             R.id.ll_sticker -> {
                 checkClick()
                 opendialogSticker()
             }
+
             R.id.ll_border -> {
-                layer_layout.visibility = View.GONE
-                border_layout.visibility = View.VISIBLE
+                binding.layerLayout.visibility = View.GONE
+                binding.borderLayout.visibility = View.VISIBLE
             }
+
             R.id.border_back -> {
-                layer_layout.visibility = View.VISIBLE
-                border_layout.visibility = View.GONE
+                binding.layerLayout.visibility = View.VISIBLE
+                binding.borderLayout.visibility = View.GONE
             }
 
             R.id.effect_gallery -> {
@@ -502,24 +558,26 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                 intent.action = Intent.ACTION_PICK
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
             }
+
             R.id.border_blur -> {
-                var gpuImage = GPUImage(this@ImageEditActivity)
+                val gpuImage = GPUImage(this@ImageEditActivity)
                 gpuImage.setImage(blur_bitmap)
                 gpuImage.setFilter(GPUImageGaussianBlurFilter(5F))
 
-                frame_layout.background =
+                binding.frameLayout.background =
                     BitmapDrawable(resources, gpuImage.bitmapWithFilterApplied)
             }
+
             R.id.img_save -> {
 
                 checkClick()
 
-                ll_crop.visibility = View.GONE
-                ll_filter.visibility = View.GONE
-                ll_effect.visibility = View.GONE
-                ll_adjust.visibility = View.GONE
-                ll_hsl.visibility = View.GONE
-                ll_layers.visibility = View.GONE
+                binding.llCrop.visibility = View.GONE
+                binding.llFilter.visibility = View.GONE
+                binding.llEffect.visibility = View.GONE
+                binding.llAdjust.visibility = View.GONE
+                binding.llHsl.visibility = View.GONE
+                binding.llLayers.visibility = View.GONE
 
                 MainActivity.isFromSaved = true
 
@@ -537,49 +595,47 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
             R.id.img_reset -> {
 
                 checkClick()
-                var builder = AlertDialog.Builder(this)
+                val builder = AlertDialog.Builder(this)
                 builder.setMessage("Are you sure you want to reset image?")
-                    .setPositiveButton("Yes", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
+                    .setPositiveButton(
+                        "Yes"
+                    )
+                    { dialog, which ->
+                        var doBreak = false
+                        while (!doBreak) {
+                            val childcount: Int = binding.frameLayout.childCount
+                            if (childcount > 0) {
+                                var i: Int = 0
+                                for (i in 0 until childcount) {
 
-                            var doBreak = false
-                            while (!doBreak) {
-                                var childcount: Int = frame_layout.childCount
-                                if (childcount > 0) {
-                                    var i: Int = 0
-                                    for (i in 0 until childcount) {
+                                    val v: View = binding.frameLayout.getChildAt(i)
 
-                                        var v: View = frame_layout.getChildAt(i)
-
-                                        if (v is StickerView) {
-                                            frame_layout.removeView(v)
-                                            break
-                                        }
-                                    }
-                                    if (childcount == 1) {
-                                        doBreak = true
+                                    if (v is StickerView) {
+                                        binding.frameLayout.removeView(v)
+                                        break
                                     }
                                 }
+                                if (childcount == 1) {
+                                    doBreak = true
+                                }
                             }
-
-                            image_frame.setPadding(0, 0, 0, 0)
-                            frame_layout.setBackgroundColor(resources.getColor(R.color.transparent))
-
-                            overlay_light.visibility = View.GONE
-                            overlay_weather.visibility = View.GONE
-                            overlay_texture.visibility = View.GONE
-
-                            original_bitmap = image_bitmap
-                            img_main.setImageBitmap(original_bitmap)
-
-                            dialog!!.dismiss()
                         }
-                    })
-                    .setNegativeButton("No", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            dialog!!.dismiss()
-                        }
-                    }).show()
+
+                        binding.imageFrame.setPadding(0, 0, 0, 0)
+                        binding.frameLayout.setBackgroundColor(resources.getColor(R.color.transparent))
+
+                        binding.overlayLight.visibility = View.GONE
+                        binding.overlayWeather.visibility = View.GONE
+                        binding.overlayTexture.visibility = View.GONE
+
+                        original_bitmap = image_bitmap
+                        binding.imgMain.setImageBitmap(original_bitmap)
+
+                        dialog!!.dismiss()
+                    }
+                    .setNegativeButton(
+                        "No"
+                    ) { dialog, which -> dialog!!.dismiss() }.show()
 
             }
         }
@@ -588,7 +644,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
     fun setLight(img_light: ImageView, effect: Array<EffectData>) {
 
         img_light.visibility = View.VISIBLE
-        var main_bitmap = (img_main.getDrawable() as BitmapDrawable).bitmap
+        var main_bitmap = (binding.imgMain.getDrawable() as BitmapDrawable).bitmap
         var bitmap =
             (resources.getDrawable(effect[0].icon) as BitmapDrawable).bitmap
         bitmap = Bitmap.createScaledBitmap(
@@ -599,8 +655,8 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         )
         img_light.setImageBitmap(bitmap)
 
-        seekbar_blend.progress = 90
-        img_light.imageAlpha = seekbar_blend.progress
+        binding.seekbarBlend.progress = 90
+        img_light.imageAlpha = binding.seekbarBlend.progress
 
     }
 
@@ -695,7 +751,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         override fun onPostExecute(result: Bitmap?) {
             super.onPostExecute(result)
 
-            var gpuImage1 = GPUImage(this@ImageEditActivity)
+            val gpuImage1 = GPUImage(this@ImageEditActivity)
             gpuImage1.setImage(original_bitmap)
             gpuImage1.setFilter(
                 createBlendFilter(
@@ -703,7 +759,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                     blend_bitmap
                 )
             )
-            img_main.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
+            binding.imgMain.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
         }
     }
 
@@ -769,13 +825,13 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         var list_font: RecyclerView = subview.findViewById(R.id.list_font) as RecyclerView
         var list_color: RecyclerView = subview.findViewById(R.id.list_color) as RecyclerView
 
-        var alert: AlertDialog.Builder = AlertDialog.Builder(this)
+        val alert: AlertDialog.Builder = AlertDialog.Builder(this)
         alert.setView(subview)
         alert.setCancelable(true)
 
 
         list_font.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        var fontadapter: FontAdapter = FontAdapter(this)
+        val fontadapter = FontAdapter(this)
         list_font.adapter = fontadapter
 
         fontadapter.setOnFontClick(object : FontAdapter.FontClickListener {
@@ -785,7 +841,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         })
 
         list_color.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        var colorAdapter = ColorAdapter(this)
+        val colorAdapter = ColorAdapter(this)
         list_color.adapter = colorAdapter
         colorAdapter.setOnColorClick(object : ColorAdapter.ColorClickListener {
             override fun onItemClick(view: View, colorName: String) {
@@ -793,17 +849,15 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
             }
         })
 
-        btn_done.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                var tv_sticker = StickerTextView(this@ImageEditActivity)
+        btn_done.setOnClickListener {
+            val tv_sticker = StickerTextView(this@ImageEditActivity)
 
-                tv_sticker.tv_main!!.setText(editText.text.toString())
-                tv_sticker.tv_main!!.setTypeface(editText.typeface)
-                tv_sticker.tv_main!!.setTextColor(editText.textColors)
-                frame_layout.addView(tv_sticker)
-                dialog.dismiss()
-            }
-        })
+            tv_sticker.tv_main!!.text = editText.text.toString()
+            tv_sticker.tv_main!!.typeface = editText.typeface
+            tv_sticker.tv_main!!.setTextColor(editText.textColors)
+            binding.frameLayout.addView(tv_sticker)
+            dialog.dismiss()
+        }
 
         dialog = alert.create()
         dialog.show()
@@ -843,9 +897,9 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
                 stickerAdapter.setOnStickerClick(object : StickerAdapter.StickerListener {
                     override fun onStickerClick(view: View, drawable: Drawable) {
-                        var iv_sticker = StickerImageView(this@ImageEditActivity)
+                        val iv_sticker = StickerImageView(this@ImageEditActivity)
                         iv_sticker.setImageDrawable(drawable)
-                        frame_layout.addView(iv_sticker)
+                        binding.frameLayout.addView(iv_sticker)
                         dialog.dismiss()
                     }
                 })
@@ -854,9 +908,9 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
         stickerAdapter.setOnStickerClick(object : StickerAdapter.StickerListener {
             override fun onStickerClick(view: View, drawable: Drawable) {
-                var iv_sticker = StickerImageView(this@ImageEditActivity)
+                val iv_sticker = StickerImageView(this@ImageEditActivity)
                 iv_sticker.setImageDrawable(drawable)
-                frame_layout.addView(iv_sticker)
+                binding.frameLayout.addView(iv_sticker)
                 dialog.dismiss()
             }
         })
@@ -901,7 +955,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class border_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            image_frame.setPadding(progress, progress, progress, progress)
+            binding.imageFrame.setPadding(progress, progress, progress, progress)
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -929,7 +983,11 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             filterAdjuster_hue!!.adjust(progress)
 
-            groupfilter(progress, seekbar_saturation.progress, seekbar_brightness.progress)
+            groupfilter(
+                progress,
+                binding.seekbarSaturation.progress,
+                binding.seekbarBrightness.progress
+            )
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -942,7 +1000,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
     inner class saturation_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             filterAdjuster_sat!!.adjust(progress)
-            groupfilter(seekbar_hue.progress, progress, seekbar_brightness.progress)
+            groupfilter(binding.seekbarHue.progress, progress, binding.seekbarBrightness.progress)
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -956,7 +1014,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             filterAdjuster_bright!!.adjust(progress)
 
-            groupfilter(seekbar_hue.progress, seekbar_saturation.progress, progress)
+            groupfilter(binding.seekbarHue.progress, binding.seekbarSaturation.progress, progress)
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -968,7 +1026,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class effectLight_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            overlay_light.imageAlpha = progress
+            binding.overlayLight.imageAlpha = progress
 
 //            overlay_light.setImageBitmap((overlay_light.drawable as BitmapDrawable).bitmap)
 
@@ -985,7 +1043,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class effectTexture_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            overlay_texture.imageAlpha = progress
+            binding.overlayTexture.imageAlpha = progress
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -999,7 +1057,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class effectWeather_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            overlay_weather.imageAlpha = progress
+            binding.overlayWeather.imageAlpha = progress
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -1025,7 +1083,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         group.addFilter(GPUImageSaturationFilter())
         group.addFilter(GPUImageBrightnessFilter())
 
-        var mergedFilters = group.mergedFilters
+        val mergedFilters = group.mergedFilters
         filterAdjuster_hue = GPUImageFilterTools.FilterAdjuster(mergedFilters.get(0))
         filterAdjuster_hue!!.adjust(progress_hue)
         filterAdjuster_sat = GPUImageFilterTools.FilterAdjuster(mergedFilters.get(1))
@@ -1035,12 +1093,16 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
         gpuImage1.setFilter(group)
         hsl_bitmap = gpuImage1.bitmapWithFilterApplied
-        img_main.setImageBitmap(hsl_bitmap)
+        binding.imgMain.setImageBitmap(hsl_bitmap)
+    }
+
+    private val binding by lazy {
+        ActivityImageEditBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image_edit)
+        setContentView(binding.root)
 
         array_img = resources.obtainTypedArray(R.array.img_options)
         array_text = resources.getStringArray(R.array.text_options)
@@ -1055,12 +1117,11 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         D_height = (display.heightPixels.toFloat() - density * 150.0f).toInt()
 
 
-        var inputStream: InputStream?
-        try {
-            inputStream = contentResolver.openInputStream(Uri.parse(imageUri))
+        val inputStream: InputStream? = try {
+            contentResolver.openInputStream(Uri.parse(imageUri))
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
-            inputStream = null
+            null
         }
 
         original_bitmap = BitmapFactory.decodeStream(inputStream)
@@ -1068,166 +1129,184 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
 
         image_bitmap = original_bitmap
         blur_bitmap = original_bitmap
-        img_main.setImageBitmap(original_bitmap)
+        binding.imgMain.setImageBitmap(original_bitmap)
 
-        list_resize.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list_resize.adapter = ResizeAdapter(this, this)
-
-        list_options.layoutManager =
+        binding.listResize.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list_options.adapter = OptionAdapter()
+        binding.listResize.adapter = ResizeAdapter(this, this)
 
-        list_filterstype.layoutManager =
+        binding.listOptions.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.listOptions.adapter = OptionAdapter()
+
+        binding.listFilterstype.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         var filter_detailadapter = FilterDetailAdapter(filter_clr1)
-        list_filterstype.adapter = filter_detailadapter
+        binding.listFilterstype.adapter = filter_detailadapter
 
-        filter_names.layoutManager =
+        binding.filterNames.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        var filternameadapter = FilterNameAdapter(this, resources.getStringArray(R.array.filters))
+        val filternameadapter = FilterNameAdapter(this, resources.getStringArray(R.array.filters))
 
         filternameadapter.setOnFilterNameClick(object : FilterNameAdapter.FilterNameClickListener {
             override fun onItemClick(view: View, position: Int) {
-                if (position == 0) {
-                    filter_detailadapter = FilterDetailAdapter(filter_clr1)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 1) {
-                    filter_detailadapter = FilterDetailAdapter(filter_clr2)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 2) {
-                    filter_detailadapter = FilterDetailAdapter(filter_duo)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 3) {
-                    filter_detailadapter = FilterDetailAdapter(filter_pink)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 4) {
-                    filter_detailadapter = FilterDetailAdapter(filter_fresh)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 5) {
-                    filter_detailadapter = FilterDetailAdapter(filter_euro)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 6) {
-                    filter_detailadapter = FilterDetailAdapter(filter_dark)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 7) {
-                    filter_detailadapter = FilterDetailAdapter(filter_ins)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 8) {
-                    filter_detailadapter = FilterDetailAdapter(filter_elegant)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 9) {
-                    filter_detailadapter = FilterDetailAdapter(filter_golden)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 10) {
-                    filter_detailadapter = FilterDetailAdapter(filter_tint)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 11) {
-                    filter_detailadapter = FilterDetailAdapter(filter_film)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 12) {
-                    filter_detailadapter = FilterDetailAdapter(filter_lomo)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 13) {
-                    filter_detailadapter = FilterDetailAdapter(filter_movie)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 14) {
-                    filter_detailadapter = FilterDetailAdapter(filter_retro)
-                    list_filterstype.adapter = filter_detailadapter
-                } else if (position == 15) {
-                    filter_detailadapter = FilterDetailAdapter(filter_bw)
-                    list_filterstype.adapter = filter_detailadapter
-                } else {
-                    filter_detailadapter = FilterDetailAdapter(filter_clr1)
-                    list_filterstype.adapter = filter_detailadapter
+                val filters = when (position) {
+                    0 -> {
+                        filter_clr1
+                    }
+
+                    1 -> {
+                        filter_clr2
+                    }
+
+                    2 -> {
+                        filter_duo
+                    }
+
+                    3 -> {
+                        filter_pink
+                    }
+
+                    4 -> {
+                        filter_fresh
+                    }
+
+                    5 -> {
+                        filter_euro
+                    }
+
+                    6 -> {
+                        filter_dark
+                    }
+
+                    7 -> {
+                        filter_ins
+                    }
+
+                    8 -> {
+                        filter_elegant
+                    }
+
+                    9 -> {
+                        filter_golden
+                    }
+
+                    10 -> {
+                        filter_tint
+                    }
+
+                    11 -> {
+                        filter_film
+                    }
+
+                    12 -> {
+                        filter_lomo
+                    }
+
+                    13 -> {
+                        filter_movie
+                    }
+
+                    14 -> {
+                        filter_retro
+                    }
+
+                    15 -> {
+                        filter_bw
+                    }
+
+                    else -> {
+                        filter_clr1
+                    }
                 }
+                filter_detailadapter = FilterDetailAdapter(filters)
+                binding.listFilterstype.adapter = filter_detailadapter
                 filternameadapter.notifyDataSetChanged()
                 filter_detailadapter.notifyDataSetChanged()
             }
         })
 
-        filter_names.adapter = filternameadapter
+        binding.filterNames.adapter = filternameadapter
 
-        list_blend.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list_blend.adapter = BlendAdapter(img_blend)
-
-        list_blend_type.layoutManager =
+        binding.listBlend.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list_blend_type.adapter = BlendTypeAdapter(img_blend)
+        binding.listBlend.adapter = BlendAdapter(img_blend)
 
-        list_adjust.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list_adjust.adapter = AdjustAdapter()
+        binding.listBlendType.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.listBlendType.adapter = BlendTypeAdapter(img_blend)
 
-        list_border.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.listAdjust.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.listAdjust.adapter = AdjustAdapter()
 
-        var gpuImage = GPUImage(this@ImageEditActivity)
+        binding.listBorder.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        val gpuImage = GPUImage(this@ImageEditActivity)
         gpuImage.setImage(blur_bitmap)
         gpuImage.setFilter(GPUImageGaussianBlurFilter(5F))
 
-        border_blur.setImageBitmap(gpuImage.bitmapWithFilterApplied)
+        binding.borderBlur.setImageBitmap(gpuImage.bitmapWithFilterApplied)
 
-        border_blur.setOnClickListener(this)
+        binding.borderBlur.setOnClickListener(this)
 
-        var cAdapter = ColorAdapter(this)
+        val cAdapter = ColorAdapter(this)
         cAdapter.setOnColorClick(object : ColorAdapter.ColorClickListener {
             override fun onItemClick(view: View, colorName: String) {
-                frame_layout.setBackgroundColor(Integer.valueOf(Color.parseColor(colorName)))
+                binding.frameLayout.setBackgroundColor(Integer.valueOf(Color.parseColor(colorName)))
             }
         })
-        list_border.adapter = cAdapter
+        binding.listBorder.adapter = cAdapter
 
-        crop_cancel.setOnClickListener(this)
-        crop_confirm.setOnClickListener(this)
-        filter_confirm.setOnClickListener(this)
-        filter_cancel.setOnClickListener(this)
-        effect_confirm.setOnClickListener(this)
-        effect_cancel.setOnClickListener(this)
-        effect_back.setOnClickListener(this)
-        adjust_confirm.setOnClickListener(this)
-        adjust_cancel.setOnClickListener(this)
-        hsl_confirm.setOnClickListener(this)
-        hsl_cancel.setOnClickListener(this)
-        layers_confirm.setOnClickListener(this)
-        layers_cancel.setOnClickListener(this)
+        binding.cropCancel.setOnClickListener(this)
+        binding.cropConfirm.setOnClickListener(this)
+        binding.filterConfirm.setOnClickListener(this)
+        binding.filterCancel.setOnClickListener(this)
+        binding.effectConfirm.setOnClickListener(this)
+        binding.effectCancel.setOnClickListener(this)
+        binding.effectBack.setOnClickListener(this)
+        binding.adjustConfirm.setOnClickListener(this)
+        binding.adjustCancel.setOnClickListener(this)
+        binding.hslConfirm.setOnClickListener(this)
+        binding.hslCancel.setOnClickListener(this)
+        binding.layersConfirm.setOnClickListener(this)
+        binding.layersCancel.setOnClickListener(this)
 
 
-        txt_resize.setOnClickListener(this)
-        txt_rotate.setOnClickListener(this)
-        crop_rotate_left.setOnClickListener(this)
-        crop_rotate_right.setOnClickListener(this)
-        flip_horizontal.setOnClickListener(this)
-        flip_vertical.setOnClickListener(this)
-        img_save.setOnClickListener(this)
-        img_reset.setOnClickListener(this)
+        binding.txtResize.setOnClickListener(this)
+        binding.txtRotate.setOnClickListener(this)
+        binding.cropRotateLeft.setOnClickListener(this)
+        binding.cropRotateRight.setOnClickListener(this)
+        binding.flipHorizontal.setOnClickListener(this)
+        binding.flipVertical.setOnClickListener(this)
+        binding.imgSave.setOnClickListener(this)
+        binding.imgReset.setOnClickListener(this)
 
-        ll_blend.setOnClickListener(this)
-        ll_light.setOnClickListener(this)
-        ll_texture.setOnClickListener(this)
-        ll_weather.setOnClickListener(this)
+        binding.llBlend.setOnClickListener(this)
+        binding.llLight.setOnClickListener(this)
+        binding.llTexture.setOnClickListener(this)
+        binding.llWeather.setOnClickListener(this)
 
-        ll_text.setOnClickListener(this)
-        ll_sticker.setOnClickListener(this)
-        ll_border.setOnClickListener(this)
-        border_back.setOnClickListener(this)
-        effect_gallery.setOnClickListener(this)
+        binding.llText.setOnClickListener(this)
+        binding.llSticker.setOnClickListener(this)
+        binding.llBorder.setOnClickListener(this)
+        binding.borderBack.setOnClickListener(this)
+        binding.effectGallery.setOnClickListener(this)
 
-        seekbar_border.setOnSeekBarChangeListener(border_listener())
-        seekbar_adjust1.setOnSeekBarChangeListener(adjust1_listener())
+        binding.seekbarBorder.setOnSeekBarChangeListener(border_listener())
+        binding.seekbarAdjust1.setOnSeekBarChangeListener(adjust1_listener())
 
-        seekbar_hue.setOnSeekBarChangeListener(hue_listener())
-        seekbar_saturation.setOnSeekBarChangeListener(saturation_listener())
-        seekbar_brightness.setOnSeekBarChangeListener(brightness_listener())
+        binding.seekbarHue.setOnSeekBarChangeListener(hue_listener())
+        binding.seekbarSaturation.setOnSeekBarChangeListener(saturation_listener())
+        binding.seekbarBrightness.setOnSeekBarChangeListener(brightness_listener())
 
-        AdLoader.ads.ShowFBAds(this@ImageEditActivity)
-
-        frame_layout.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-
-                if (event!!.action == MotionEvent.ACTION_DOWN) {
-                    HideStickers()
-                }
-                return true
+        binding.frameLayout.setOnTouchListener { v, event ->
+            if (event!!.action == MotionEvent.ACTION_DOWN) {
+                HideStickers()
             }
-        })
+            true
+        }
     }
 
     inner class FilterDetailAdapter(filters: Array<FilterData>) :
@@ -1258,45 +1337,42 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
             blue = filterType[position].blue
             saturation = filterType[position].saturation
 
-            var bitmap = Bitmap.createBitmap(
-                original_bitmap.getWidth(),
-                original_bitmap.getHeight(),
+            val bitmap = Bitmap.createBitmap(
+                original_bitmap.width,
+                original_bitmap.height,
                 Bitmap.Config.ARGB_8888
             )
-            var canvas = Canvas(bitmap)
+            val canvas = Canvas(bitmap)
 
-            var paint = Paint()
-            var colorMatrix = ColorMatrix()
+            val paint = Paint()
+            val colorMatrix = ColorMatrix()
             colorMatrix.setSaturation(saturation)
 
-            var colorScale = ColorMatrix()
+            val colorScale = ColorMatrix()
             colorScale.setScale(red, green, blue, 1F)
             colorMatrix.postConcat(colorScale)
 
-            paint.setColorFilter(ColorMatrixColorFilter(colorMatrix))
+            paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
             canvas.drawBitmap(original_bitmap, 0F, 0F, paint)
 
             holder.thumbnail_filter.setImageBitmap(bitmap)
 
-            holder.filterName.setText(filterType[position].text)
+            holder.filterName.text = filterType[position].text
 
-            holder.rl_filteritem.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
+            holder.rl_filteritem.setOnClickListener {
+                selectedindex = position
 
-                    selectedindex = position
+                red = filterType[position].red
+                green = filterType[position].green
+                blue = filterType[position].blue
+                saturation = filterType[position].saturation
 
-                    red = filterType[position].red
-                    green = filterType[position].green
-                    blue = filterType[position].blue
-                    saturation = filterType[position].saturation
-
-                    Async_Filter(
-                        original_bitmap,
-                        img_main
-                    ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, red, green, blue)
-                    notifyDataSetChanged()
-                }
-            })
+                Async_Filter(
+                    original_bitmap,
+                    binding.imgMain
+                ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, red, green, blue)
+                notifyDataSetChanged()
+            }
         }
 
         inner class FilterDetailHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -1355,8 +1431,8 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     fun HideStickers() {
-        var fm = frame_layout
-        var childcount: Int = frame_layout.childCount
+        val fm = binding.frameLayout
+        val childcount: Int = binding.frameLayout.childCount
 
         if (childcount != 0) {
             for (i in 0 until childcount) {
@@ -1386,7 +1462,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
             holder.txt_option.setText(array_text!![position])
 
 
-            var lp: LinearLayout.LayoutParams =
+            val lp: LinearLayout.LayoutParams =
                 LinearLayout.LayoutParams(D_width / 6, LinearLayout.LayoutParams.WRAP_CONTENT)
             holder.ll_option.layoutParams = lp
 
@@ -1398,85 +1474,89 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                 holder.img_option.setColorFilter(resources.getColor(R.color.white))
             }
 
-            holder.ll_option.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    selectedIndex = position
+            holder.ll_option.setOnClickListener {
+                selectedIndex = position
 
-                    when (position) {
-                        0 -> {
-                            ll_crop.visibility = View.VISIBLE
-                            ll_filter.visibility = View.GONE
-                            ll_effect.visibility = View.GONE
-                            ll_adjust.visibility = View.GONE
-                            ll_hsl.visibility = View.GONE
-                            ll_layers.visibility = View.GONE
-                            cropImageView.imageBitmap = original_bitmap
-                        }
-                        1 -> {
-                            ll_crop.visibility = View.GONE
-                            ll_filter.visibility = View.VISIBLE
-                            ll_effect.visibility = View.GONE
-                            ll_adjust.visibility = View.GONE
-                            ll_hsl.visibility = View.GONE
-                            ll_layers.visibility = View.GONE
-                        }
-                        2 -> {
-                            ll_crop.visibility = View.GONE
-                            ll_filter.visibility = View.GONE
-                            ll_effect.visibility = View.VISIBLE
-                            ll_adjust.visibility = View.GONE
-                            ll_hsl.visibility = View.GONE
-                            ll_layers.visibility = View.GONE
-                        }
-                        3 -> {
-                            ll_crop.visibility = View.GONE
-                            ll_filter.visibility = View.GONE
-                            ll_effect.visibility = View.GONE
-                            ll_adjust.visibility = View.VISIBLE
-                            ll_hsl.visibility = View.GONE
-                            ll_layers.visibility = View.GONE
-
-                            filterAdjuster = GPUImageFilterTools.FilterAdjuster(filter_adjust[0])
-                            seekbar_adjust1.progress = 90
-                            filterAdjuster!!.adjust(seekbar_adjust1.progress)
-
-                            filter_apply(0)
-                        }
-                        4 -> {
-                            ll_crop.visibility = View.GONE
-                            ll_filter.visibility = View.GONE
-                            ll_effect.visibility = View.GONE
-                            ll_adjust.visibility = View.GONE
-                            ll_hsl.visibility = View.VISIBLE
-                            ll_layers.visibility = View.GONE
-
-                            hsl_bitmap = original_bitmap
-                            groupfilter(
-                                seekbar_hue.progress,
-                                seekbar_saturation.progress,
-                                seekbar_brightness.progress
-                            )
-                        }
-                        5 -> {
-                            ll_crop.visibility = View.GONE
-                            ll_filter.visibility = View.GONE
-                            ll_effect.visibility = View.GONE
-                            ll_adjust.visibility = View.GONE
-                            ll_hsl.visibility = View.GONE
-                            ll_layers.visibility = View.VISIBLE
-                        }
-                        else -> {
-                            ll_crop.visibility = View.GONE
-                            ll_filter.visibility = View.VISIBLE
-                            ll_effect.visibility = View.GONE
-                            ll_adjust.visibility = View.GONE
-                            ll_hsl.visibility = View.GONE
-                            ll_layers.visibility = View.GONE
-                        }
+                when (position) {
+                    0 -> {
+                        binding.llCrop.visibility = View.VISIBLE
+                        binding.llFilter.visibility = View.GONE
+                        binding.llEffect.visibility = View.GONE
+                        binding.llAdjust.visibility = View.GONE
+                        binding.llHsl.visibility = View.GONE
+                        binding.llLayers.visibility = View.GONE
+                        binding.cropImageView.imageBitmap = original_bitmap
                     }
-                    notifyDataSetChanged()
+
+                    1 -> {
+                        binding.llCrop.visibility = View.GONE
+                        binding.llFilter.visibility = View.VISIBLE
+                        binding.llEffect.visibility = View.GONE
+                        binding.llAdjust.visibility = View.GONE
+                        binding.llHsl.visibility = View.GONE
+                        binding.llLayers.visibility = View.GONE
+                    }
+
+                    2 -> {
+                        binding.llCrop.visibility = View.GONE
+                        binding.llFilter.visibility = View.GONE
+                        binding.llEffect.visibility = View.VISIBLE
+                        binding.llAdjust.visibility = View.GONE
+                        binding.llHsl.visibility = View.GONE
+                        binding.llLayers.visibility = View.GONE
+                    }
+
+                    3 -> {
+                        binding.llCrop.visibility = View.GONE
+                        binding.llFilter.visibility = View.GONE
+                        binding.llEffect.visibility = View.GONE
+                        binding.llAdjust.visibility = View.VISIBLE
+                        binding.llHsl.visibility = View.GONE
+                        binding.llLayers.visibility = View.GONE
+
+                        filterAdjuster = GPUImageFilterTools.FilterAdjuster(filter_adjust[0])
+                        binding.seekbarAdjust1.progress = 90
+                        filterAdjuster!!.adjust(binding.seekbarAdjust1.progress)
+
+                        filter_apply(0)
+                    }
+
+                    4 -> {
+                        binding.llCrop.visibility = View.GONE
+                        binding.llFilter.visibility = View.GONE
+                        binding.llEffect.visibility = View.GONE
+                        binding.llAdjust.visibility = View.GONE
+                        binding.llHsl.visibility = View.VISIBLE
+                        binding.llLayers.visibility = View.GONE
+
+                        hsl_bitmap = original_bitmap
+                        groupfilter(
+                            binding.seekbarHue.progress,
+                            binding.seekbarSaturation.progress,
+                            binding.seekbarBrightness.progress
+                        )
+                    }
+
+                    5 -> {
+                        binding.llCrop.visibility = View.GONE
+                        binding.llFilter.visibility = View.GONE
+                        binding.llEffect.visibility = View.GONE
+                        binding.llAdjust.visibility = View.GONE
+                        binding.llHsl.visibility = View.GONE
+                        binding.llLayers.visibility = View.VISIBLE
+                    }
+
+                    else -> {
+                        binding.llCrop.visibility = View.GONE
+                        binding.llFilter.visibility = View.VISIBLE
+                        binding.llEffect.visibility = View.GONE
+                        binding.llAdjust.visibility = View.GONE
+                        binding.llHsl.visibility = View.GONE
+                        binding.llLayers.visibility = View.GONE
+                    }
                 }
-            })
+                notifyDataSetChanged()
+            }
         }
 
         inner class OptionHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -1487,10 +1567,10 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     fun filter_apply(position: Int) {
-        var gpuImage1 = GPUImage(this@ImageEditActivity)
+        val gpuImage1 = GPUImage(this@ImageEditActivity)
         gpuImage1.setImage(original_bitmap)
         gpuImage1.setFilter(filter_adjust[position])
-        img_main.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
+        binding.imgMain.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
     }
 
     inner class LightAdapter(effectList: Array<EffectData>, imageview: ImageView) :
@@ -1524,51 +1604,48 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                 holder.rl_filteritem.setBackgroundColor(resources.getColor(R.color.transparent))
             }
 
-            holder.rl_filteritem.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
+            holder.rl_filteritem.setOnClickListener {
+                selectedindex = position
+                selectedPosition = position
+                img_overlay.visibility = View.VISIBLE
 
-                    selectedindex = position
-                    selectedPosition = position
-                    img_overlay.visibility = View.VISIBLE
+                val main_bitmap = (binding.imgMain.getDrawable() as BitmapDrawable).bitmap
+                var bitmap =
+                    (resources.getDrawable(effects!![position].icon) as BitmapDrawable).bitmap
+                bitmap = Bitmap.createScaledBitmap(
+                    bitmap,
+                    main_bitmap.width,
+                    main_bitmap.height,
+                    true
+                )
 
-                    var main_bitmap = (img_main.getDrawable() as BitmapDrawable).bitmap
-                    var bitmap =
-                        (resources.getDrawable(effects!![position].icon) as BitmapDrawable).bitmap
-                    bitmap = Bitmap.createScaledBitmap(
-                        bitmap,
-                        main_bitmap.width,
-                        main_bitmap.height,
-                        true
-                    )
+                /* var bmp: Bitmap
 
-                    /* var bmp: Bitmap
+                             if (original_bitmap.getWidth() > original_bitmap.getHeight()) {
 
-                     if (original_bitmap.getWidth() > original_bitmap.getHeight()) {
+                                 bmp = ThumbnailUtils.extractThumbnail(
+                                     bitmap,
+                                     original_bitmap.getWidth(),
+                                     original_bitmap.getHeight(),
+                                     ThumbnailUtils.OPTIONS_RECYCLE_INPUT
+                                 )
+                             } else if (original_bitmap.getWidth() < original_bitmap.getHeight()) {
+                                 bmp = ThumbnailUtils.extractThumbnail(
+                                     bitmap,
+                                     original_bitmap.getWidth(),
+                                     original_bitmap.getHeight(),
+                                     ThumbnailUtils.OPTIONS_RECYCLE_INPUT
+                                 )
+                             } else {
+                                 bmp = bitmap
+                             }*/
 
-                         bmp = ThumbnailUtils.extractThumbnail(
-                             bitmap,
-                             original_bitmap.getWidth(),
-                             original_bitmap.getHeight(),
-                             ThumbnailUtils.OPTIONS_RECYCLE_INPUT
-                         )
-                     } else if (original_bitmap.getWidth() < original_bitmap.getHeight()) {
-                         bmp = ThumbnailUtils.extractThumbnail(
-                             bitmap,
-                             original_bitmap.getWidth(),
-                             original_bitmap.getHeight(),
-                             ThumbnailUtils.OPTIONS_RECYCLE_INPUT
-                         )
-                     } else {
-                         bmp = bitmap
-                     }*/
+                img_overlay.setImageBitmap(bitmap)
 
-                    img_overlay.setImageBitmap(bitmap)
-
-                    seekbar_blend.progress = 90
-                    img_overlay.imageAlpha = seekbar_blend.progress
-                    notifyDataSetChanged()
-                }
-            })
+                binding.seekbarBlend.progress = 90
+                img_overlay.imageAlpha = binding.seekbarBlend.progress
+                notifyDataSetChanged()
+            }
         }
 
         inner class LightHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -1612,7 +1689,7 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
         }
 
         override fun onBindViewHolder(holder: BlendTypeHolder, position: Int) {
-            holder.text_blend_type.setText(text_Blend_type[position])
+            holder.text_blend_type.text = text_Blend_type[position]
 
             if (selectedindex == position) {
                 holder.item_adjust.setBackgroundColor(resources.getColor(R.color.colorAccent))
@@ -1620,63 +1697,60 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                 holder.item_adjust.setBackgroundColor(resources.getColor(R.color.transparent))
             }
 
-            holder.item_adjust.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
+            holder.item_adjust.setOnClickListener {
+                blendfilter_position = position
+                selectedindex = position
 
-                    blendfilter_position = position
-                    selectedindex = position
+                val gpuImage1 = GPUImage(this@ImageEditActivity)
+                gpuImage1.setImage(original_bitmap)
 
-                    var gpuImage1 = GPUImage(this@ImageEditActivity)
-                    gpuImage1.setImage(original_bitmap)
+                val blendFilter: GPUImageFilter
+                if (!isFromGallery) {
 
-                    var blendFilter: GPUImageFilter
-                    if (!isFromGallery) {
+                    var image: Bitmap = BitmapFactory.decodeResource(
+                        resources, img_effect[bledImage_position]
+                    )
+                    if (original_bitmap.width > original_bitmap.height) {
 
-                        var image: Bitmap = BitmapFactory.decodeResource(
-                            resources, img_effect[bledImage_position]
+                        image = ThumbnailUtils.extractThumbnail(
+                            image,
+                            original_bitmap.width,
+                            original_bitmap.height,
+                            ThumbnailUtils.OPTIONS_RECYCLE_INPUT
                         )
-                        if (original_bitmap.getWidth() > original_bitmap.getHeight()) {
-
-                            image = ThumbnailUtils.extractThumbnail(
-                                image,
-                                original_bitmap.getWidth(),
-                                original_bitmap.getHeight(),
-                                ThumbnailUtils.OPTIONS_RECYCLE_INPUT
-                            )
-                        } else if (original_bitmap.getWidth() < original_bitmap.getHeight()) {
-                            image = ThumbnailUtils.extractThumbnail(
-                                image,
-                                original_bitmap.getWidth(),
-                                original_bitmap.getHeight(),
-                                ThumbnailUtils.OPTIONS_RECYCLE_INPUT
-                            )
-                        } else {
-                            image = image
-                        }
-
-                        blendFilter = createBlendFilter(
-                            filters_blend[blendfilter_position],
-                            image
+                    } else if (original_bitmap.width < original_bitmap.height) {
+                        image = ThumbnailUtils.extractThumbnail(
+                            image,
+                            original_bitmap.getWidth(),
+                            original_bitmap.getHeight(),
+                            ThumbnailUtils.OPTIONS_RECYCLE_INPUT
                         )
-                        gpuImage1.setFilter(blendFilter)
-                        img_main.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
                     } else {
-
-                        creaate_bmp().executeOnExecutor(
-                            AsyncTask.THREAD_POOL_EXECUTOR,
-                            blend_bitmap
-                        )
-
-//                        blendFilter = createBlendFilter(
-//                            filters_blend[blendfilter_position],
-//                            blend_bitmap
-//                        )
+                        image = image
                     }
 
+                    blendFilter = createBlendFilter(
+                        filters_blend[blendfilter_position],
+                        image
+                    )
+                    gpuImage1.setFilter(blendFilter)
+                    binding.imgMain.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
+                } else {
 
-                    notifyDataSetChanged()
+                    creaate_bmp().executeOnExecutor(
+                        AsyncTask.THREAD_POOL_EXECUTOR,
+                        blend_bitmap
+                    )
+
+                    //                        blendFilter = createBlendFilter(
+                    //                            filters_blend[blendfilter_position],
+                    //                            blend_bitmap
+                    //                        )
                 }
-            })
+
+
+                notifyDataSetChanged()
+            }
         }
 
         inner class BlendTypeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -1786,47 +1860,44 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                 holder.rl_blenditem.setBackgroundColor(resources.getColor(R.color.transparent))
             }
 
-            holder.thumbnail_blend.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    isFromGallery = false
-                    bledImage_position = position
-                    selectedindex = position
+            holder.thumbnail_blend.setOnClickListener {
+                isFromGallery = false
+                bledImage_position = position
+                selectedindex = position
 
-                    var image: Bitmap = BitmapFactory.decodeResource(
-                        resources, img_effects[bledImage_position]
+                var image: Bitmap = BitmapFactory.decodeResource(
+                    resources, img_effects[bledImage_position]
+                )
+                if (original_bitmap.width > original_bitmap.height) {
+
+                    image = ThumbnailUtils.extractThumbnail(
+                        image,
+                        original_bitmap.getWidth(),
+                        original_bitmap.getHeight(),
+                        ThumbnailUtils.OPTIONS_RECYCLE_INPUT
                     )
-                    if (original_bitmap.getWidth() > original_bitmap.getHeight()) {
-
-                        image = ThumbnailUtils.extractThumbnail(
-                            image,
-                            original_bitmap.getWidth(),
-                            original_bitmap.getHeight(),
-                            ThumbnailUtils.OPTIONS_RECYCLE_INPUT
-                        )
-                    } else if (original_bitmap.getWidth() < original_bitmap.getHeight()) {
-                        image = ThumbnailUtils.extractThumbnail(
-                            image,
-                            original_bitmap.getWidth(),
-                            original_bitmap.getHeight(),
-                            ThumbnailUtils.OPTIONS_RECYCLE_INPUT
-                        )
-                    } else {
-                        image = image
-                    }
-
-                    var gpuImage1 = GPUImage(this@ImageEditActivity)
-                    gpuImage1.setImage(original_bitmap)
-                    gpuImage1.setFilter(
-                        createBlendFilter(
-                            filters_blend[blendfilter_position],
-                            image
-                        )
+                } else if (original_bitmap.width < original_bitmap.height) {
+                    image = ThumbnailUtils.extractThumbnail(
+                        image,
+                        original_bitmap.width,
+                        original_bitmap.height,
+                        ThumbnailUtils.OPTIONS_RECYCLE_INPUT
                     )
-                    img_main.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
-                    notifyDataSetChanged()
+                } else {
+                    image = image
                 }
 
-            })
+                val gpuImage1 = GPUImage(this@ImageEditActivity)
+                gpuImage1.setImage(original_bitmap)
+                gpuImage1.setFilter(
+                    createBlendFilter(
+                        filters_blend[blendfilter_position],
+                        image
+                    )
+                )
+                binding.imgMain.setImageBitmap(gpuImage1.bitmapWithFilterApplied)
+                notifyDataSetChanged()
+            }
         }
 
 
@@ -1909,23 +1980,19 @@ class ImageEditActivity : AppCompatActivity(), View.OnClickListener,
                 holder.item_adjust.setBackgroundColor(resources.getColor(R.color.transparent))
             }
 
-            holder.item_adjust.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
+            holder.item_adjust.setOnClickListener {
+                adjust_position = position
 
-                    adjust_position = position
+                selectedindex = position
 
-                    selectedindex = position
+                filterAdjuster =
+                    GPUImageFilterTools.FilterAdjuster(filter_adjust[position])
+                binding.seekbarAdjust1.progress = 90
+                filterAdjuster!!.adjust(binding.seekbarAdjust1.progress)
 
-                    filterAdjuster =
-                        GPUImageFilterTools.FilterAdjuster(filter_adjust[position])
-                    seekbar_adjust1.progress = 90
-                    filterAdjuster!!.adjust(seekbar_adjust1.progress)
-
-                    filter_apply(adjust_position)
-                    notifyDataSetChanged()
-                }
-
-            })
+                filter_apply(adjust_position)
+                notifyDataSetChanged()
+            }
 
         }
 

@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.photoeditor.photoeffect">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/app_icon"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon"
-        android:usesCleartextTraffic="true">
+        tools:replace="android:icon">
 
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/Admob_AppID"/>
+            android:value="@string/Admob_AppID" />
 
         <activity
-            android:name="com.photoeditor.photoeffect.SplashActivity"
+            android:name="com.photoeditor.photoeffect.activities.SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.photoeditor.photoeffect.MyCreationActivity"
+            android:name="com.photoeditor.photoeffect.activities.MyCreationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.photoeditor.photoeffect.FilterCollageActivity"
+            android:name="com.photoeditor.photoeffect.activities.FilterCollageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.photoeditor.photoeffect.CollageActivity"
+            android:name="com.photoeditor.photoeffect.activities.CollageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.photoeditor.photoeffect.SelectImageActivity"
+            android:name="com.photoeditor.photoeffect.activities.SelectImageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.photoeditor.photoeffect.ImageEditActivity"
+            android:name="com.photoeditor.photoeffect.activities.ImageEditActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.photoeditor.photoeffect.MainActivity"
+            android:name="com.photoeditor.photoeffect.activities.MainActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.photoeditor.photoeffect.ShowImageActivity"
+            android:name="com.photoeditor.photoeffect.activities.ShowImageActivity"
             android:screenOrientation="portrait" />
 
         <provider

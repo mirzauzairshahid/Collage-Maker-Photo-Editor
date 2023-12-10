@@ -51,15 +51,12 @@ class BackgroundAdapter(
             holder.ll_itemframe.setBackgroundColor(mContext.resources.getColor(R.color.transparent))
         }
 
-        holder.img_frame.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                selectedindex = position
+        holder.img_frame.setOnClickListener {
+            selectedindex = position
 
-                bgListener.onBGClick(drawable)
-                notifyDataSetChanged()
-            }
-
-        })
+            bgListener.onBGClick(drawable!!)
+            notifyDataSetChanged()
+        }
     }
 
     class BackgroundHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

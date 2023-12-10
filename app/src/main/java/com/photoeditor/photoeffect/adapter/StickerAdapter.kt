@@ -59,18 +59,16 @@ class StickerAdapter(context: Context, position: Int) :
         }
 
         holder.img_color.setImageDrawable(drawable)
-        holder.img_color.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                selectedindex = position
-                try {
-                    stickerListener.onStickerClick(v!!, drawable)
-                    notifyDataSetChanged()
-                } catch (e: Exception) {
-
-                }
+        holder.img_color.setOnClickListener { v ->
+            selectedindex = position
+            try {
+                stickerListener.onStickerClick(v!!, drawable!!)
                 notifyDataSetChanged()
+            } catch (e: Exception) {
+
             }
-        })
+            notifyDataSetChanged()
+        }
     }
 
     inner class StickerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
