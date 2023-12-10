@@ -12,10 +12,6 @@ import java.util.*
 
 object GPUImageFilterTools {
 
-    fun addFilters(context: Context) {
-
-    }
-
     fun showDialog(
         context: Context,
         listener: (filter: GPUImageFilter) -> Unit

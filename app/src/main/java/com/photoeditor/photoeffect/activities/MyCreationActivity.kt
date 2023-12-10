@@ -1,6 +1,5 @@
-package com.photoeditor.photoeffect
+package com.photoeditor.photoeffect.activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
@@ -15,16 +14,16 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_my_creation.*
 import java.io.File
 import java.lang.Long.compare
 import java.util.*
 import kotlin.collections.ArrayList
-import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.RelativeLayout
-import com.photoeditor.photoeffect.MainActivity.Companion.isFromSaved
+import com.photoeditor.photoeffect.R
+import com.photoeditor.photoeffect.activities.MainActivity.Companion.isFromSaved
+import com.photoeditor.photoeffect.databinding.ActivityMyCreationBinding
 
 
 class MyCreationActivity : AppCompatActivity() {
@@ -32,22 +31,18 @@ class MyCreationActivity : AppCompatActivity() {
 
     lateinit var img_path: ArrayList<File_Model>
 
-    private var mLastClickTime: Long = 0
-    fun checkClick() {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
+    private val binding by lazy {
+        ActivityMyCreationBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_creation)
+        setContentView(binding.root)
 
-        list_creation.layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+        binding.listCreation.layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
 
         LoadImages().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        Log.e("Page","My creation")
+        Log.e("Page", "My creation")
 
 
     }
@@ -64,23 +59,22 @@ class MyCreationActivity : AppCompatActivity() {
             super.onPostExecute(result)
 
             if (img_path.size == 0) {
-                var builder = AlertDialog.Builder(this@MyCreationActivity)
+                val builder = AlertDialog.Builder(this@MyCreationActivity)
                 builder.setMessage("No Files Found").setCancelable(false)
-                    .setPositiveButton("Ok", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            dialog!!.cancel()
-                            onBackPressed()
-                        }
-                    })
-                var alert = builder.create()
+                    .setPositiveButton("Ok"
+                    ) { dialog, which ->
+                        dialog!!.cancel()
+                        onBackPressed()
+                    }
+                val alert = builder.create()
                 alert.show()
                 return
             }
 
             if (img_path != null) {
 
-                var creationAdapter = CreationAdapter(img_path)
-                list_creation.adapter = creationAdapter
+                val creationAdapter = CreationAdapter(img_path)
+                binding.listCreation.adapter = creationAdapter
             }
 
         }
@@ -88,21 +82,21 @@ class MyCreationActivity : AppCompatActivity() {
     }
 
     fun updateFileList() {
-        var path = Environment.getExternalStorageDirectory().toString() + "/ArtisticEditor"
+        val path = Environment.getExternalStorageDirectory().toString() + "/ArtisticEditor"
         val directory = File(path)
         val files = directory.listFiles()
 
         img_path = ArrayList()
 
-        var fileDateCmp = Comparator<File> { f1, f2 ->
+        val fileDateCmp = Comparator<File> { f1, f2 ->
             compare(f2.lastModified(), f1.lastModified())
         }
 
         if (files != null) {
             Arrays.sort(files, fileDateCmp)
 
-            for (i in 0 until files.size) {
-                var file_model = File_Model()
+            for (i in files.indices) {
+                val file_model = File_Model()
                 file_model.file_path = files[i].absolutePath
                 file_model.file_title = files[i].name
                 img_path.add(file_model)
@@ -142,44 +136,30 @@ class MyCreationActivity : AppCompatActivity() {
             holder.img_creation.layoutParams = RelativeLayout.LayoutParams(width / 2, width / 2)
 
             holder.img_creation.setImageURI(Uri.parse(paths[position].file_path))
-            holder.txt_title.setText(paths[position].file_title)
-            holder.img_dlt.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
+            holder.txt_title.text = paths[position].file_title
+            holder.img_dlt.setOnClickListener {
 
-                    checkClick()
+                var builder = AlertDialog.Builder(this@MyCreationActivity)
+                builder.setMessage("Are you sure you want to delete?")
+                    .setPositiveButton("Yes"
+                    ) { dialog, which ->
+                        val filepath = paths[position].file_path
+                        if (File(filepath).delete()) {
+                            paths.removeAt(position)
+                            notifyDataSetChanged()
+                        }
+                        dialog!!.dismiss()
+                    }
+                    .setNegativeButton("No"
+                    ) { dialog, _ -> dialog!!.dismiss() }.show()
+            }
 
-                    var builder = AlertDialog.Builder(this@MyCreationActivity)
-                    builder.setMessage("Are you sure you want to delete?")
-                        .setPositiveButton("Yes", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                var filepath = paths[position].file_path
-                                if (File(filepath).delete()) {
-                                    paths.removeAt(position)
-                                    notifyDataSetChanged()
-                                }
-                                dialog!!.dismiss()
-                            }
-                        })
-                        .setNegativeButton("No", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                dialog!!.dismiss()
-                            }
-                        }).show()
-                }
-
-            })
-
-            holder.img_creation.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-
-                    checkClick()
-
-                    val intent = Intent(this@MyCreationActivity, ShowImageActivity::class.java)
-                    intent.putExtra("image_uri", paths[position].file_path)
-                    startActivity(intent)
-                    finish()
-                }
-            })
+            holder.img_creation.setOnClickListener {
+                val intent = Intent(this@MyCreationActivity, ShowImageActivity::class.java)
+                intent.putExtra("image_uri", paths[position].file_path)
+                startActivity(intent)
+                finish()
+            }
         }
 
         inner class CreationHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

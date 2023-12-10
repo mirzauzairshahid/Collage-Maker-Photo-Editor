@@ -6,11 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-
-import com.photoeditor.photoeffect.R
 import com.photoeditor.photoeffect.adapter.GalleryAlbumImageAdapter
-import kotlinx.android.synthetic.main.fragment_gallery_album_image.view.*
+import com.photoeditor.photoeffect.databinding.FragmentGalleryAlbumImageBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -22,9 +19,9 @@ class GalleryAlbumImageFragment : Fragment() {
         val ALBUM_NAME_EXTRA = "albumName"
     }
 
-    var mImages: ArrayList<String> = ArrayList()
+    var mImages: ArrayList<String>? = ArrayList()
     lateinit var names: String
-    lateinit var mListener: OnSelectImageListener
+    var mListener: OnSelectImageListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,35 +31,26 @@ class GalleryAlbumImageFragment : Fragment() {
         }
     }
 
+    var binding: FragmentGalleryAlbumImageBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        var view = inflater.inflate(R.layout.fragment_gallery_album_image, container, false)
+        binding = FragmentGalleryAlbumImageBinding.inflate(layoutInflater, container, false)
 
         if (arguments != null) {
-            mImages = arguments!!.getStringArrayList(ALBUM_IMAGE_EXTRA)!!
-            names = arguments!!.getString(ALBUM_NAME_EXTRA)!!
+            mImages = arguments?.getStringArrayList(ALBUM_IMAGE_EXTRA)!!
+            names = arguments?.getString(ALBUM_NAME_EXTRA)!!
 
-            if (mImages != null) {
-
-                view.gridView.adapter = GalleryAlbumImageAdapter(view.context, mImages)
-                view.gridView.setOnItemClickListener(object : AdapterView.OnItemClickListener {
-                    override fun onItemClick(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        if (mListener != null) {
-                            mListener.onSelectImage(mImages[position])
-                        }
-                    }
-                })
+            mImages?.let { images ->
+                binding?.gridView?.adapter = GalleryAlbumImageAdapter(requireContext(), images)
+                binding?.gridView?.setOnItemClickListener { _, _, position, _ ->
+                    mListener?.onSelectImage(images[position])
+                }
             }
+
         }
-        return view
+        return binding?.root
     }
 
     interface OnSelectImageListener {

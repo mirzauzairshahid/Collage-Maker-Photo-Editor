@@ -1,4 +1,4 @@
-package com.photoeditor.photoeffect
+package com.photoeditor.photoeffect.activities
 
 import android.content.Intent
 import android.graphics.*
@@ -8,7 +8,6 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +17,12 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.photoeditor.photoeffect.MainActivity.Companion.isFromSaved
+import com.photoeditor.photoeffect.AndroidUtils
+import com.photoeditor.photoeffect.R
+import com.photoeditor.photoeffect.activities.MainActivity.Companion.isFromSaved
 import com.photoeditor.photoeffect.adapter.FilterNameAdapter
+import com.photoeditor.photoeffect.databinding.ActivityFilterCollageBinding
 import com.photoeditor.photoeffect.model.FilterData
-import kotlinx.android.synthetic.main.activity_filter_collage.*
-import kotlinx.android.synthetic.main.activity_filter_collage.filter_names
-import kotlinx.android.synthetic.main.activity_filter_collage.list_filterstype
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -31,18 +30,9 @@ import java.util.*
 
 class FilterCollageActivity : AppCompatActivity(), View.OnClickListener {
 
-    private var mLastClickTime: Long = 0
-    fun checkClick() {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-    }
-
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.img_save -> {
-                checkClick()
                 isFromSaved = true
                 try {
                     saveBitmap(screenShot)
@@ -113,86 +103,113 @@ class FilterCollageActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     lateinit var bmp: Bitmap
+
+    private val binding by lazy {
+        ActivityFilterCollageBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_filter_collage)
+        setContentView(binding.root)
 
         val bitmapPath = this.cacheDir.absolutePath + "/tempBMP"
         bmp = BitmapFactory.decodeFile(bitmapPath)
 
-        img_collage.setImageBitmap(bmp)
+        binding.imgCollage.setImageBitmap(bmp)
 
-        img_save.setOnClickListener(this)
-        list_filterstype.layoutManager =
+        binding.imgSave.setOnClickListener(this)
+        binding.listFilterstype.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         var filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_clr1)
-        list_filterstype.adapter = filter_typeAdapter
+        binding.listFilterstype.adapter = filter_typeAdapter
 
-        filter_names.layoutManager =
+        binding.filterNames.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        var filter_nameAdapter = FilterNameAdapter(this, resources.getStringArray(R.array.filters))
+        val filter_nameAdapter = FilterNameAdapter(this, resources.getStringArray(R.array.filters))
 
         filter_nameAdapter.setOnFilterNameClick(object : FilterNameAdapter.FilterNameClickListener {
             override fun onItemClick(view: View, position: Int) {
 
-                if (position == 0) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_clr1)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 1) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_clr2)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 2) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_duo)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 3) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_pink)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 4) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_fresh)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 5) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_euro)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 6) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_dark)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 7) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_ins)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 8) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_elegant)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 9) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_golden)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 10) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_tint)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 11) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_film)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 12) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_lomo)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 13) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_movie)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 14) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_retro)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else if (position == 15) {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_bw)
-                    list_filterstype.adapter = filter_typeAdapter
-                } else {
-                    filter_typeAdapter = FilterDetailAdapter(AndroidUtils.filter_clr1)
-                    list_filterstype.adapter = filter_typeAdapter
+                val filters = when (position) {
+                    0 -> {
+                        AndroidUtils.filter_clr1
+                    }
+
+                    1 -> {
+                        AndroidUtils.filter_clr2
+                    }
+
+                    2 -> {
+                        AndroidUtils.filter_duo
+                    }
+
+                    3 -> {
+                        AndroidUtils.filter_pink
+                    }
+
+                    4 -> {
+                        AndroidUtils.filter_fresh
+                    }
+
+                    5 -> {
+                        AndroidUtils.filter_euro
+                    }
+
+                    6 -> {
+                        AndroidUtils.filter_dark
+                    }
+
+                    7 -> {
+                        AndroidUtils.filter_ins
+                    }
+
+                    8 -> {
+                        AndroidUtils.filter_elegant
+                    }
+
+                    9 -> {
+                        AndroidUtils.filter_golden
+                    }
+
+                    10 -> {
+                        AndroidUtils.filter_tint
+                    }
+
+                    11 -> {
+                        AndroidUtils.filter_film
+                    }
+
+                    12 -> {
+                        AndroidUtils.filter_lomo
+                    }
+
+                    13 -> {
+                        AndroidUtils.filter_movie
+                    }
+
+                    14 -> {
+                        AndroidUtils.filter_retro
+                    }
+
+                    15 -> {
+                        AndroidUtils.filter_bw
+                    }
+
+                    else -> {
+                        AndroidUtils.filter_clr1
+                    }
                 }
+
+
+                filter_typeAdapter = FilterDetailAdapter(filters)
+                binding.listFilterstype.adapter = filter_typeAdapter
+
                 filter_nameAdapter.notifyDataSetChanged()
                 filter_typeAdapter.notifyDataSetChanged()
             }
         })
 
-        filter_names.adapter = filter_nameAdapter
+        binding.filterNames.adapter = filter_nameAdapter
 
     }
 
@@ -264,7 +281,7 @@ class FilterCollageActivity : AppCompatActivity(), View.OnClickListener {
 
                     Async_Filter(
                         bmp,
-                        img_collage
+                        binding.imgCollage
                     ).executeOnExecutor(
                         AsyncTask.THREAD_POOL_EXECUTOR,
                         red,

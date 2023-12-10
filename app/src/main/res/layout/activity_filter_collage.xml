@@ -7,7 +7,7 @@
     android:background="@color/windowBackground"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".FilterCollageActivity">
+    tools:context=".activities.FilterCollageActivity">
 
     <ImageView
         android:id="@+id/img_save"
