@@ -20,8 +20,6 @@ import com.photoeditor.photoeffect.model.TemplateItem
 import com.photoeditor.photoeffect.utils.FrameImageUtils
 import com.photoeditor.photoeffect.utils.ImageUtils
 import android.content.Intent
-import android.os.SystemClock
-import android.widget.ImageView
 import com.photoeditor.photoeffect.AndroidUtils
 import com.photoeditor.photoeffect.R
 import com.photoeditor.photoeffect.databinding.ActivityCollageBinding
@@ -45,7 +43,6 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
     val MAX_CORNER_PROGRESS = 200.0f
     private var mBackgroundColor = Color.WHITE
     private var mBackgroundImage: Bitmap? = null
-    private var mBackgroundUri: Uri? = null
     private var mSavedInstanceState: Bundle? = null
     protected var mLayoutRatio = RATIO_SQUARE
     protected lateinit var mPhotoView: PhotoView
@@ -56,24 +53,15 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
     protected var mSelectedPhotoPaths: MutableList<String> = java.util.ArrayList()
 
     lateinit var frameAdapter: FrameAdapter
-    lateinit var img_background: ImageView
-
-    private var mLastClickTime: Long = 0
-    fun checkClick() {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-    }
 
     override fun onBGClick(drawable: Drawable) {
 
-        var bmp = mFramePhotoLayout!!.createImage()
-        var bitmap = (drawable as BitmapDrawable).bitmap
+        val bmp = mFramePhotoLayout!!.createImage()
+        val bitmap = (drawable as BitmapDrawable).bitmap
         mBackgroundImage = AndroidUtils.resizeImageToNewSize(bitmap, bmp.width, bmp.height)
 
 //        img_background.background = BitmapDrawable(resources, mBackgroundImage)
-        img_background.setImageBitmap(mBackgroundImage)
+        binding.imgBackground.setImageBitmap(mBackgroundImage)
 
     }
 
@@ -94,8 +82,8 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
         val size = Math.min(mSelectedPhotoPaths.size, templateItem.photoItemList.size)
         for (idx in 0 until size) {
-            val photoItem = templateItem.photoItemList.get(idx)
-            if (photoItem.imagePath == null || photoItem.imagePath!!.length < 1) {
+            val photoItem = templateItem.photoItemList[idx]
+            if (photoItem.imagePath.isNullOrEmpty()) {
                 photoItem.imagePath = mSelectedPhotoPaths[idx]
             }
         }
@@ -108,7 +96,7 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class space_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            mSpace = MAX_SPACE * seekBar!!.getProgress() / MAX_SPACE_PROGRESS
+            mSpace = MAX_SPACE * seekBar!!.progress / MAX_SPACE_PROGRESS
             if (mFramePhotoLayout != null)
                 mFramePhotoLayout!!.setSpace(mSpace, mCorner)
         }
@@ -123,7 +111,7 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
     inner class corner_listener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            mCorner = MAX_CORNER * seekBar!!.getProgress() / MAX_CORNER_PROGRESS
+            mCorner = MAX_CORNER * seekBar!!.progress / MAX_CORNER_PROGRESS
             if (mFramePhotoLayout != null)
                 mFramePhotoLayout!!.setSpace(mSpace, mCorner)
         }
@@ -173,11 +161,9 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
 
             R.id.btn_next -> {
 
-                checkClick()
-
                 var outStream: FileOutputStream? = null
                 try {
-                    var collageBitmap = createOutputImage()
+                    val collageBitmap = createOutputImage()
                     outStream = FileOutputStream(File(cacheDir, "tempBMP"))
                     collageBitmap.compress(Bitmap.CompressFormat.JPEG, 75, outStream)
                     outStream.close()
@@ -228,24 +214,22 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         binding.seekbarCorner.setOnSeekBarChangeListener(corner_listener())
 
         mPhotoView = PhotoView(this)
-        binding.rlContainer.getViewTreeObserver()
+        binding.rlContainer.viewTreeObserver
             .addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     mOutputScale = ImageUtils.calculateOutputScaleFactor(
-                        binding.rlContainer.getWidth(),
-                        binding.rlContainer.getHeight()
+                        binding.rlContainer.width,
+                        binding.rlContainer.height
                     )
                     buildLayout(mSelectedTemplateItem!!)
                     // remove listener
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        binding.rlContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                        binding.rlContainer.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     } else {
-                        binding.rlContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                        binding.rlContainer.viewTreeObserver.removeGlobalOnLayoutListener(this)
                     }
                 }
             })
-
-        img_background = findViewById<ImageView>(R.id.img_background)
 
         loadFrameImages()
         binding.listFrames.layoutManager =
@@ -341,8 +325,8 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         params.addRule(RelativeLayout.CENTER_IN_PARENT)
         binding.rlContainer.removeAllViews()
 
-        binding.rlContainer.removeView(img_background)
-        binding.rlContainer.addView(img_background, params)
+        binding.rlContainer.removeView(binding.imgBackground)
+        binding.rlContainer.addView(binding.imgBackground, params)
 
         binding.rlContainer.addView(mFramePhotoLayout, params)
         //add sticker view
@@ -350,22 +334,22 @@ class CollageActivity : AppCompatActivity(), View.OnClickListener,
         binding.rlContainer.addView(mPhotoView, params)
         //reset space and corner seek bars
 
-        binding.seekbarSpace.setProgress((MAX_SPACE_PROGRESS * mSpace / MAX_SPACE).toInt())
-        binding.seekbarCorner.setProgress((MAX_CORNER_PROGRESS * mCorner / MAX_CORNER).toInt())
+        binding.seekbarSpace.progress = (MAX_SPACE_PROGRESS * mSpace / MAX_SPACE).toInt()
+        binding.seekbarCorner.progress = (MAX_CORNER_PROGRESS * mCorner / MAX_CORNER).toInt()
     }
 
     @Throws(OutOfMemoryError::class)
     fun createOutputImage(): Bitmap {
         try {
-            var template = mFramePhotoLayout!!.createImage()
+            val template = mFramePhotoLayout!!.createImage()
             val result =
-                Bitmap.createBitmap(template!!.width, template.height, Bitmap.Config.ARGB_8888)
+                Bitmap.createBitmap(template.width, template.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(result)
             val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            if (mBackgroundImage != null && !mBackgroundImage!!.isRecycled()) {
+            if (mBackgroundImage != null && !mBackgroundImage!!.isRecycled) {
                 canvas.drawBitmap(
                     mBackgroundImage!!,
-                    Rect(0, 0, mBackgroundImage!!.getWidth(), mBackgroundImage!!.getHeight()),
+                    Rect(0, 0, mBackgroundImage!!.width, mBackgroundImage!!.height),
                     Rect(0, 0, result.width, result.height),
                     paint
                 )
